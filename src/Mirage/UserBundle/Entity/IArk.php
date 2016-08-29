@@ -2,8 +2,9 @@
 
 namespace Mirage\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
+use JMS\Serializer\Annotation\Type as JMSType;
 /**
  * IArk
  *
@@ -18,7 +19,9 @@ class IArk
         $this->created = $now;
         $this->updated = $now;
         $this->isEnabled = false;
+        $this->iPhases = new ArrayCollection();
     }
+
     /**
      * @var integer
      *
@@ -126,9 +129,19 @@ class IArk
     private $idPlayer;
 
     /**
+     * @JMSType("Mirage\MainBundle\Document\Ark")
      * @var \Mirage\MainBundle\Document\Ark
      */
     protected $ark;
+
+
+    /**
+     * @var \Mirage\UserBundle\Entity\IArkPhase
+     * @JMSType("Mirage\UserBundle\Entity\IArkPhase")
+     * @ORM\OneToMany(targetEntity="IArkPhase", mappedBy="idIArk")
+     * @ORM\JoinColumn(name="id", referencedColumnName="idIArk")
+     */
+    protected $iPhases = array();
 
     /**
      * Get id
@@ -507,6 +520,35 @@ class IArk
     {
         $this->ark = $ark;
     }
+
+    /**
+     * @return IArkPhase
+     */
+    public function getIPhases()
+    {
+        return $this->iPhases;
+    }
+
+    /**
+     * @param IArkPhase $iPhases
+     */
+    public function setIPhases($iPhases)
+    {
+        $this->iPhases = $iPhases;
+    }
+
+    public function addIPhase(IArkPhase $iArkPhase){
+        if($this->iPhases->contains($iArkPhase)){
+            $this->iPhases->add($iArkPhase);
+        }
+        return $this;
+    }
+
+    public function removeIPhase($iArkPhase){
+        $this->iPhases->removeElement($iArkPhase);
+        return $this;
+    }
+
 
 
 }

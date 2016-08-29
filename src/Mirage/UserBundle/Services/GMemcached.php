@@ -17,7 +17,10 @@ class GMemcached {
     const PREFIX_ITEMS = "items_";
     const PREFIX_DETAIL = "detail_";
     const PREFIX_ARK = "ark_";
-    
+    const PREFIX_I_ARK = "i_ark_";
+    const PREFIX_I_ARK_PHASE = "i_ark_phase";
+    const PREFIX_I_DECK = "i_deck";
+
     const MEM_LIMIT_USER  = 3600;
     const MEM_LIMIT_GREE_MODERATION = 3600; //とりあえず1時間をリミットにしておいた 監査OKは24時間、監査中は3時間キャッシュできる
     const MEM_LIMIT_GREE_PEOPLE = 3600; //とりあえず1時間をリミットにしておいた

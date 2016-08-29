@@ -46,13 +46,14 @@ class BattleController extends Controller
 
             $encounter = $encounter->deleteId();
             if ($encounter->getStartDay() < $now && $encounter->getEndDay() > $now) {
-                $playerDeck = $em->getRepository('MirageUserBundle:IDeck')->loadArkByIdIDeck($idPlayerDeck, $mPlayer);
+                $iDeck = $em->getRepository('MirageUserBundle:IDeck')->findOneById($idPlayerDeck);
+
+                //$playerDeck = $em->getRepository('MirageUserBundle:IDeck')->loadArkByIdIDeck($idPlayerDeck, $mPlayer);
 //                $playerDeck->useBattle();
 
-                $playerArkPhases = $em->getRepository('MirageUserBundle:IArkPhase')->loadArkPhaseByIdIArk($playerDeck);
+                $playerArkPhases = $em->getRepository('MirageUserBundle:IArkPhase')->loadArkPhaseByIdIArk($iDeck);
 
-                $arks = $this->sumArk($difficulty, $encounter->getEnemyPos(), $playerDeck, $playerArkPhases);
-
+                $arks = $this->sumArk($difficulty, $encounter->getEnemyPos(), $iDeck);
 
                 $info = array("mapInfo" => $encounter->getStageInfo(), "arks" => $arks);
 
@@ -63,7 +64,7 @@ class BattleController extends Controller
 
         return new Response(
             $this->ObjectToJson(
-                null// $info
+                $info
             )
         );
     }
@@ -111,12 +112,16 @@ class BattleController extends Controller
 
         foreach ($playerDeck->getArkPos() as $position => $ark) {
             if (isset($ark)) {
-                $deckArk = GMemcached::get('Ark_'.$ark->getIdArk());
-                var_dump(get_class($ark->getIdCurrentPhase()));
+                //$masterArk = GMemcached::get(GMemcached::PREFIX_ARK.$ark->getIdArk());
+                var_dump($ark->getIdArk());
+                $masterArk = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findOneByArkId((int)$ark->getIdArk());
+                $ark->getUpdated();
+                var_dump(get_class($ark));
                 foreach ($playerArkPhases as $idIArk => $phase) {
+
                     if(isset($ark)){
                         if ($idIArk == $ark->getId()) {
-                            $arkPhase = $deckArk->editPlayerArkStatus((array)$ark, $phase);
+                            $arkPhase = $masterArk->editPlayerArkStatus((array)$ark, $phase);
                         }
                     }
                 }

@@ -12,7 +12,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Mirage\AdminBundle\Controller\GameConfig;
 
 /**
- * @MongoDB\Document()
+ * @MongoDB\Document(repositoryClass="Mirage\MainBundle\Repository\ArkRepository")
  */
 class Ark
 {
@@ -282,17 +282,22 @@ class Ark
     {
         return (array)$this;
     }
-    public function editPlayerArkStatus($ark,$arkPhase)
+
+    public function combineIArk($iArk)
     {
-        $arrayThis = $this->toArray();
-
-//        var_dump(new ArrayCollection($ark));
-       // var_dump($arrayThis);
-        foreach($ark as $key => $value)
+        foreach($iArk->getIPhases() as $iPhase)
         {
+            if(isset($iPhase))
+            {
+                foreach($this->phases as $phase)
+                {
+                    if($phase->getPhaseId() == $iPhase->getIdArkPhase())
+                    {
+                        $phase->combineIPhase($iPhase);
+                    }
+                }
+            }
         }
-
         return $this;
     }
-
 }

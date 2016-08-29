@@ -10,7 +10,7 @@ namespace Mirage\MainBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
-use Mirage\AdminBundle\Controller\Controller;
+use Mirage\UserBundle\Controller\Controller;
 use Mirage\MainBundle\Document\SpriteAnimation;
 
 
