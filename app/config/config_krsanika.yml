@@ -1,0 +1,118 @@
+imports:
+    - { resource: config.yml }
+
+web_profiler:
+    toolbar: "%debug_toolbar%"
+    intercept_redirects: "%debug_redirects%"
+
+monolog:
+    handlers:
+        main:
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  debug
+        console:
+            type:   console
+            bubble: false
+#         uncomment to get logging in your browser
+#         you may have to allow bigger header sizes in your Web server configuration
+        firephp:
+            type:   firephp
+            level:  info
+        chromephp:
+            type:   chromephp
+            level:  info
+
+#assetic:
+#    debug:                '%kernel.debug%'
+#    use_controller:
+#        enabled:              '%kernel.debug%'
+
+doctrine:
+      dbal :
+          types:
+              tinyint: Doctrine\DBAL\Types\TinyIntType
+          default_connection : user1_readonly
+          connections :
+              user1_readonly :
+                  driver:   pdo_mysql
+                  host:     '%sql_user1_host%'
+                  port:     '%sql_user1_port%'
+                  dbname:   mirage_user1
+                  user:     '%sql_user_readonly%'
+                  password: '%sql_user_pass%'
+                  charset:  UTF8
+              user1_admin :
+                  driver:   pdo_mysql
+                  host:     '%sql_user1_host%'
+                  port:     '%sql_user1_port%'
+                  dbname:   mirage_user1
+                  user:     '%sql_user_admin%'
+                  password: '%sql_user_pass%'
+                  charset:  UTF8
+              user2_readonly :
+                 driver:   pdo_mysql
+                 host:     '%sql_user2_host%'
+                 port:     '%sql_user2_port%'
+                 dbname:   mirage_user2
+                 user:     '%sql_user_readonly%'
+                 password: '%sql_user_pass%'
+                 charset:  UTF8
+              user2_admin :
+                 driver:   pdo_mysql
+                 host:     '%sql_user2_host%'
+                 port:     '%sql_user2_port%'
+                 dbname:   mirage_user2
+                 user:     '%sql_user_readonly%'
+                 password: '%sql_user_pass%'
+                 charset:  UTF8
+
+      orm:
+        default_entity_manager: user1_admin
+        entity_managers:
+            user1_readonly:
+                connection: user1_readonly
+                mappings:
+                    MirageUserBundle:  ~
+                    MirageMainBundle: ~
+            user1_admin:
+                connection: user1_admin
+                mappings:
+                    MirageAdminBundle: ~
+                    MirageUserBundle:  ~
+                    MirageMainBundle: ~
+            user2_readonly:
+                connection: user2_readonly
+                mappings:
+                    MirageUserBundle:  ~
+                    MirageMainBundle: ~
+            user2_admin:
+                connection: user2_admin
+                mappings:
+                    MirageAdminBundle: ~
+                    MirageUserBundle:  ~
+                    MirageMainBundle: ~
+
+doctrine_mongodb:
+    default_database: mirage_main
+    connections:
+        mirage_main:
+            server: "%dev_main%"
+            options: {}
+    document_managers:
+        mirage_main:
+            connection: mirage_main
+            database: mirage_main
+            retry_connect: 0
+            retry_query: 0
+            auto_mapping : true
+            metadata_cache_driver:
+                type: memcache
+                class: Doctrine\Common\Cache\MemcacheCache
+                host: "%memcache_host%"
+                port: "%memcache_port%"
+                instance_class: Memcache
+    auto_generate_hydrator_classes: true
+
+swiftmailer:
+    delivery_address: krsanika@jokerforge.com

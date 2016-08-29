@@ -1,0 +1,38 @@
+# This file is auto-generated during the composer install
+parameters:
+    mailer_transport: smtp
+    mailer_host: mail.jokerforge.com
+    mailer_user: no_replay@jokerforge.com
+    mailer_password: whwldhdnpf
+    mailer_encryption :
+    mailer_authmode : login
+    mailer_port : 25
+    secret: bc5597118012490c3553d73fac2cd0b05d9ccb7d
+    database_driver: pdo_mysql
+#    database_user: mirage_main
+#    database_password: gladlvlfdygksrk?
+#    database_name: mirage_user
+
+    onair_main : localhost:27017
+    stage_main : localhost:27017
+    dev_main : localhost:27017
+
+    sql_user1_host : 127.0.0.1
+    sql_user1_port : 3306
+    sql_user2_host : 127.0.0.1
+    sql_user2_port : 3306
+    sql_user_admin : mirage_admin
+    sql_user_readonly : mirage_player
+    sql_user_pass : whwldhdnpf0
+
+
+    locale: kr
+    debug_toolbar: true
+    debug_redirects: false
+    use_assetic_controller: true
+
+
+#    mailer_transport :
+#    mailer_host :
+#    mailer_user :
+#    mailser_password :

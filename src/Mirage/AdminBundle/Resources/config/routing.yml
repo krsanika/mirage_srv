@@ -1,0 +1,20 @@
+Tool:
+    prefix : /
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/ToolController.php"
+
+Encounter:
+    prefix : /encounter
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/EncounterController.php"
+
+Ark:
+    prefix : /ark
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/ArkController.php"
+
+
+Cache:
+    prefix : /cache
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/GMemcacheController.php"

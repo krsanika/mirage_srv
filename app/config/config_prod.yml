@@ -1,0 +1,84 @@
+imports:
+    - { resource: config.yml }
+
+#framework:
+#    validation:
+#        cache: apc
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        console:
+            type:  console
+
+# Doctrine Configuration
+#doctrine:
+#    dbal:
+#        driver:   "%database_driver%"
+#        host:     "%database_host%"
+#        port:     "%database_port%"
+#        dbname:   "%database_name%"
+#        user:     "%database_user%"
+#        password: "%database_password%"
+#        charset:  UTF8
+#        # if using pdo_sqlite as your database driver, add the path in parameters.yml
+#        # e.g. database_path: "%kernel.root_dir%/data/data.db3"
+#        # path:     "%database_path%"
+#
+#    orm:
+#        auto_generate_proxy_classes: "%kernel.debug%"
+#        auto_mapping: true
+
+doctrine_mongodb:
+    connections:
+        mirage_main:
+            server: "%dev_main%"
+            options: {}
+        mirage_user1:
+            server: "%dev_user1%"
+            options: {}
+        mirage_user2:
+            server: "%dev_user2%"
+            options: {}
+    default_database: mirage_main
+    document_managers:
+        mirage_main:
+            connection: mirage_main
+            database: %dev_main%
+            retry_connect: %dev_main%
+            retry_query: %dev_main%
+            mappings:
+              MirageMainBundle : ~
+              MirageUserBundle : ~
+              MirageAdminBundle : ~
+        mirage_user1:
+            connection: mirage_user1
+            database: %dev_user1%
+            retry_connect: %dev_user1%
+            retry_query: %dev_user1%
+            mappings:
+              MirageMainBundle : ~
+              MirageUserBundle : ~
+              MirageAdminBundle : ~
+        mirage_user2:
+            connection: mirage_user2
+            database: %dev_user2%
+            retry_connect: %dev_user2%
+            retry_query: %dev_user2%
+            mappings:
+              MirageMainBundle : ~
+              MirageUserBundle : ~
+              MirageAdminBundle : ~

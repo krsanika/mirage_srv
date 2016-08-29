@@ -1,0 +1,11 @@
+mirage_user:
+    resource: "@MirageUserBundle/Resources/config/routing.yml"
+    prefix:   /user
+
+mirage_apocripha:
+    resource: "@MirageAdminBundle/Resources/config/routing.yml"
+    prefix:   /apocripha
+
+mirage_main:
+    resource: "@MirageMainBundle/Resources/config/routing.yml"
+    prefix:   /

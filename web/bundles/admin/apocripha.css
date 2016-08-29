@@ -1,0 +1,64 @@
+body{
+    margin : 0px;
+}
+
+select{
+    font-size : 20px;
+}
+
+#content{
+    padding : 10px;
+    margin-left : 10px;
+}
+
+#sidebar{
+    background-color: #99CDD8;
+    width : 300px;
+    height : 100%;
+    float : left;
+
+}
+
+.setterBox{
+    /*display : none;*/
+    background-color : mistyrose;
+    border : #C82829 1px dotted;
+    padding : 3px;
+}
+
+#ori_tags{
+    display : none;
+}
+
+.sbox{
+    width : 300px;
+    height : 30px;
+    text-align: center;
+    line-height: 30px;
+}
+
+.button{
+    width : 200px;
+    height : 30px;
+    font-size : 17px;
+
+}
+
+.button.accept{
+    background-color: #6b9311;
+}
+
+.button.cancle{
+    background-color : #B0413E;
+}
+
+#field{
+    height : 400px;
+    margin : auto;
+    border : darkred 2px double;
+}
+.mas{
+    width : 100px;
+    height : 100px;
+    border : #A5C261 1px solid;
+}

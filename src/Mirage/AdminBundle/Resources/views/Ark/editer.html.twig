@@ -1,0 +1,18 @@
+<div id="ark">
+    {{ form_start(form) }}
+    {{ form_row(form.arkId) }}
+    {{ form_row(form.name_kr) }}
+    {{ form_row(form.name_jp) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.origin) }}
+    {{ form_row(form.phases) }}
+    {{ form_row(form.descript) }}
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+</div>
+<br>
+<div id="ori_tags">
+{% for key, value in tags %}
+    <input id="oribox{{key}}" type="checkbox" value="{{key}}">{{ value }}
+{%  endfor %}
+</div>

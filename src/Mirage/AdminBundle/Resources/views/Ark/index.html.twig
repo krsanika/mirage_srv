@@ -1,0 +1,30 @@
+{% extends 'MirageAdminBundle:layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+        <h1>Ark Editer</h1><br><br>
+        <select id="arkSelector" class="" onchange="Ark.changeArkId()">
+            {% for ark in arkAll %}
+                <option value="{{ ark.arkId }}">ID: {{ ark.arkId }} {{ ark.getName() }} </option>
+            {% endfor %}
+        </select>
+        <button class="button accept" onclick="Ark.loadArk()">아크 불러오기</button>
+        <button class="button">아크 신규제작</button>
+        <button class="button">아크 비활성화</button>
+        <button class="button cancle">!아크 삭제</button>
+        <br>
+
+        <form id="load">
+            <input id='loadId' type="number" name="id" hidden></input>
+        </form>
+        {% if editArk is not null%}
+            {% include 'MirageAdminBundle:Ark:editer.html.twig' with {"ark" : editArk, "json" : editArk|json_encode|raw, "form" : form, 'tags' : tags} %}
+        {%  endif %}
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('/bundles/admin/js/ark.js')}}" type="text/javascript"></script>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+Top:
+    prefix : /
+    type : annotation
+    resource : "@MirageUserBundle/Controller/TopController.php"
+
+
+Battle:
+    prefix : /battle
+    type : annotation
+    resource : "@MirageUserBundle/Controller/BattleController.php"
+
+Story:
+    prefix : /story
+    type : annotation
+    resource : "@MirageUserBundle/Controller/StoryController.php"
+
+Deck:
+    prefix : /deck
+    type : annotation
+    resource : "@MirageUserBundle/Controller/DeckController.php"
+

@@ -1,0 +1,12 @@
+
+
+Notice:
+    prefix : /notice
+    type : annotation
+    resource : "@MirageMainBundle/Controller/NoticeController.php"
+
+Sprite:
+    prefix : /sprite
+    type : annotation
+    resource : "@MirageMainBundle/Controller/SpriteController.php"
+

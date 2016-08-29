@@ -1,0 +1,43 @@
+<div id="bg">
+    BGM : {{ enc.bgmId }}<br>
+    보상 : {{ enc.rewardId }}<br>
+    <div id="field">
+        {{ enc.bgType }}<br>
+        <table>
+            {% for i in 1..3 %}
+            <tr>
+                {% for j in 0..enc.yLength %}
+                <td>
+                    <div id="mas{{i|xtrans}}{{j}}" class="mas">
+                        <select id="tileSelect{{i|xtrans}}{{j}}" name="tileType" class="tileSelect">
+                        {% for tilecount in 0..8 %}
+                            <option value="{{ tilecount }}">{{ tilecount |tile }}</option>
+                        {% endfor %}
+                        </select>
+
+                    </div>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br><br>
+</div>
+<form id="dataField">
+    <input name="data" type="textArea" value="{{ enc|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}"></input>
+    <input class="button" type="submit" value="저장"></input>
+</form>
+
+<script>
+    var encData = {
+        encId : {{ enc.encId }},
+        bgm : {{ enc.bgmId }},
+        rewardId : {{ enc.bgmId }},
+        bgType : {{ enc.bgmId }},
+        yLength : {{ enc.bgmId }},
+        tilePos : {{enc.tilePos|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+        enemyPos : {{enc.enemyPos|json_encode(constant('JSON_PRETTY_PRINT'))|raw}}
+    };
+
+</script>

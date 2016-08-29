@@ -1,0 +1,13 @@
+{% extends 'MirageAdminBundle::layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+        <a href="{{url('cache_load_arks')}}">모든 아크를 캐쉬에 때려박는당!!</a>
+
+
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+{% endblock %}
