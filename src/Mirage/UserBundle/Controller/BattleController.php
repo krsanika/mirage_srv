@@ -23,77 +23,108 @@ use Mirage\UserBundle\Entity\IArkRepository;
 
 class BattleController extends Controller
 {
-//    /**
-//     * @Route("/enc", name="battle_encounter")
-//     */
-//    public function encounterAction(Request $request){
-//        $idEnc = $request->get('id_battle');
-//        $idPlayer = $request->get('id_player');
-//        $idPlayerDeck = $request->get('id_player_deck');
-//        $em = $this->getDoctrine()->getManager('user1_readonly');
-//
-//        if(!empty($idEnc)){
-//            $encounter = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Encounter')->findOneByEncId((int)$idEnc);
-//            $playerDeck = $em->getRepository('MirageUserBundle:IDeck')->findOneById($idPlayerDeck)->getArkPos();
-//            $encounter->getTilePos();
-//
-//           // var_dump($encounter->getEnemyPos());
-//            foreach($playerDeck as $key => $value){
-//                if(!empty($value)){
-//                    $playerArks[$key] = $value;
-//                    var_dump($key, $value->getIdArk());
-//                }
-//            }
-//        }
-//        return new Response(json_encode($playerArks));
-//    }
-
     /**
-     * @Route("/enc", name="battle_encounter")
+     * @Route("/enc", name="encounter")
      */
-    public function startBattleAction(Request $request){
+    public function startBattleAction(Request $request)
+    {
 //        유저가 누군지는 멤캐쉬 참조. 덱ID와 다를경우 이놈은 어뷰징임
 //        GMemcached::get('Id')
 
         $idEnc = $request->get('id_battle');
         $idPlayer = $request->get('id_player');
         $idPlayerDeck = $request->get('id_player_deck');
+        $difficulty = $request->get('difficulty');
         $em = $this->getDoctrine()->getManager('user1_readonly');
         $mongoDtr = $this->get('doctrine_mongodb');
         $info = null;
         $now = $this->nowTime();
 
-        $mPlayer = $this->getDoctrine()->getRepository('MirageUserBundle:Player')->findBy(1);
-
-        if(!empty($idEnc)) {
+        $mPlayer = $this->getDoctrine()->getRepository('MirageUserBundle:Player')->findById(1);
+        if (!empty($idEnc)) {
             $encounter = $mongoDtr->getRepository('MirageMainBundle:Encounter')->findOneByEncId((int)$idEnc);
-            if($encounter->getStartDay() < $now && $encounter->getEndDay() > $now){
+
+            $encounter = $encounter->deleteId();
+            if ($encounter->getStartDay() < $now && $encounter->getEndDay() > $now) {
                 $playerDeck = $em->getRepository('MirageUserBundle:IDeck')->loadArkByIdIDeck($idPlayerDeck, $mPlayer);
-//                var_dump($playerDeck->getArkPos());
+//                $playerDeck->useBattle();
 
-//                foreach($playerDeck->getArkPos() as $pos => $ark){
-//                    if(isset($ark)){
-//                        var_dump($this->ObjectToJson(
-//                            $em->getRepository('MirageUserBundle:IArk')->loadIArkByIdArk($ark->getId())
-//                        ));
-//                    }
-//                   // $playerArks[] = array("ark"=>$mongoDtr->getRepository('MirageMainBundle:Ark')->findOneByArkId($ark->getIdArk()));
-//                }
-//                var_dump($this->ObjectToJson($playerArks));
+                $playerArkPhases = $em->getRepository('MirageUserBundle:IArkPhase')->loadArkPhaseByIdIArk($playerDeck);
 
-        //        $mapInfo = array("backgroudPicture"=>$encounter->getBgType(),"id_bgm"=>$encounter->getBgmId(),"yLength"=>$encounter->getYLength(),"defaultTile"=>$encounter->getDefaultTile(),"tilePos"=>$encounter->getTilePos(),"eventTrigger"=>$encounter->getEventTrigger());
-
-                $info =  array();
+                $arks = $this->sumArk($difficulty, $encounter->getEnemyPos(), $playerDeck, $playerArkPhases);
 
 
-            }
-            else{
+                $info = array("mapInfo" => $encounter->getStageInfo(), "arks" => $arks);
+
+            } else {
                 $info = "현재 운영되지 않는 던전입니다.";
             }
         }
-        $ark = $mongoDtr->getRepository('MirageMainBundle:Ark')->findOneByArkId(50);
-        return new Response($this->ObjectToJson($playerDeck));
+
+        return new Response(
+            $this->ObjectToJson(
+                null// $info
+            )
+        );
     }
 
+    public function sumArk($difficulty, $enemiesInfo, $playerDeck, $playerArkPhases)
+    {
+        $enemies = $this->combineEnemy($difficulty, $enemiesInfo);
+
+        $playerArks = $this->combinePlayerArk($playerDeck, $playerArkPhases);
+
+        return array($enemies);
+    }
+
+    //적들의 레벨, hp, 스테이터스 수정치를 모두 합쳐 전투중 사용될 적 정보를 완성하는 펑션
+    public function combineEnemy($difficulty, $enemiesInfo)
+    {
+        $enemies = null;
+        foreach ($enemiesInfo as $enemyInfo) {
+            $enemy = $enemyInfo->getEnemy();
+            $enemyModifer = $enemy->getModify();
+            $enemyPhase = $enemy->getArk()->getPhase($enemy->getPhaseId());
+            $enemyPhase->
+            sumEnemyStatus(
+                $difficulty,
+                $enemy->getLv(),
+                $enemyModifer["hp"],
+                $enemyModifer["atk"],
+                $enemyModifer["def"],
+                $enemyModifer["spd"],
+                $enemyModifer["luk"]
+            );
+            $totalInfo = array();
+            // $enemy = $enemy->deleteId();
+            $enemies[$enemyInfo->getPosition()] = $enemy;
+        }
+
+        return $enemies;
+    }
+
+
+    //플레이어의 아크들 레벨, hp, 스테이터스 수정치를 모두 합쳐 전투중 사용될 아크 정보를 완성하는 펑션
+    public function combinePlayerArk($playerDeck, $playerArkPhases)
+    {
+        $playerArks = null;
+
+        foreach ($playerDeck->getArkPos() as $position => $ark) {
+            if (isset($ark)) {
+                $deckArk = GMemcached::get('Ark_'.$ark->getIdArk());
+                var_dump(get_class($ark->getIdCurrentPhase()));
+                foreach ($playerArkPhases as $idIArk => $phase) {
+                    if(isset($ark)){
+                        if ($idIArk == $ark->getId()) {
+                            $arkPhase = $deckArk->editPlayerArkStatus((array)$ark, $phase);
+                        }
+                    }
+                }
+                $playerArks[$position] = $arkPhase;
+            }
+        }
+
+        return $playerArks;
+    }
 
 }

@@ -109,7 +109,7 @@ doctrine_mongodb:
             metadata_cache_driver:
                 type: memcache
                 class: Doctrine\Common\Cache\MemcacheCache
-                host: localhost
+                host: 211.208.67.146
                 port: 11211
                 instance_class: Memcache
     auto_generate_hydrator_classes: true

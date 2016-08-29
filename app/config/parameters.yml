@@ -15,7 +15,7 @@ parameters:
 
     onair_main : localhost:27017
     stage_main : localhost:27017
-    dev_main : "%memcache_host%"
+    dev_main : 211.208.67.146:27017
 
     sql_user1_host : 211.208.67.146
     sql_user1_port : 3306
@@ -28,13 +28,12 @@ parameters:
 
     locale: kr
     debug_toolbar: true
-    debug_redirects: true
+    debug_redirects: false
     use_assetic_controller: true
 
 
     memcache_host: 211.208.67.146
     memcache_port: 11211
-
 #    mailer_transport :
 #    mailer_host :
 #    mailer_user :

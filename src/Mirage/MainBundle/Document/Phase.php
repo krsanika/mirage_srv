@@ -85,6 +85,11 @@ class Phase
     protected $tags = array();
 
     /**
+     * @MongoDB\Bool
+     */
+    protected $isEnabled;
+
+    /**
     * @return mixed
     */
     public function getPhaseId()
@@ -331,14 +336,37 @@ class Phase
         $this->skills->removeElement($skill);
     }
 
-
-    public function sumStatus($hp,$atk,$def,$spd,$luk)
+    /**
+     * Set isEnabled
+     *
+     * @param Bool $isEnabled
+     * @return self
+     */
+    public function setIsEnabled($isEnabled)
     {
-        $this->hp += $hp;
-        $this->atk += $atk;
-        $this->def += $def;
-        $this->spd += $spd;
-        $this->luk += $luk;
+        $this->isEnabled = $isEnabled;
+        return $this;
+    }
+
+    /**
+     * Get isEnabled
+     *
+     * @return Bool $isEnabled
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
+
+
+    //================================================//
+    public function replaceStatus($hp,$atk,$def,$spd,$luk)
+    {
+        $this->hp = $hp;
+        $this->atk = $atk;
+        $this->def = $def;
+        $this->spd = $spd;
+        $this->luk = $luk;
 
         return $this;
     }

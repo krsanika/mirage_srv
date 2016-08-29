@@ -42,6 +42,13 @@ class IArkPhase
     private $dressUp = '0';
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="hp", type="integer", nullable=false)
+     */
+    private $hp = '0';
+
+    /**
      * @var tinyint
      *
      * @ORM\Column(name="atk", type="tinyint", nullable=false)
@@ -165,6 +172,32 @@ class IArkPhase
     {
         return $this->dressUp;
     }
+
+
+    /**
+     * Set hp
+     *
+     * @param integer $hp
+     *
+     * @return IArkPhase
+     */
+    public function setHp($hp)
+    {
+        $this->hp = $hp;
+
+        return $this;
+    }
+
+    /**
+     * Get hp
+     *
+     * @return integer
+     */
+    public function getHp()
+    {
+        return $this->hp;
+    }
+
 
     /**
      * Set atk

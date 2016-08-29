@@ -47,8 +47,9 @@ class IArkPhaseRepository extends EntityRepository
                 $arkPhases = $query->getResult();
                 foreach($arkPhases as $arkPhase)
                 {
-                    $arkPhase->useBattle();
+                    $arkPhase->deleteIArk();
                 }
+//                $arkPhases[0]->deleteIArk();
                 $enterArk[$ark->getId()] = $arkPhases;
             }
         }

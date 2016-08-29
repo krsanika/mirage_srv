@@ -4,6 +4,7 @@ namespace Mirage\UserBundle\Entity;
 
 use \Mirage\UserBundle\Entity\IArk;
 use \Mirage\UserBundle\Entity\Player;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
