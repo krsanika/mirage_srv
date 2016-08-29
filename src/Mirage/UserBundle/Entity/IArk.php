@@ -125,7 +125,10 @@ class IArk
      */
     private $idPlayer;
 
-
+    /**
+     * @var \Mirage\MainBundle\Document\Ark
+     */
+    protected $ark;
 
     /**
      * Get id
@@ -488,4 +491,22 @@ class IArk
         unset($this->isEnabled);
         return $this;
     }
+
+    /**
+     * @return \Mirage\MainBundle\Document\Ark
+     */
+    public function getArk()
+    {
+        return $this->ark;
+    }
+
+    /**
+     * @param \Mirage\MainBundle\Document\Ark $ark
+     */
+    public function setArk($ark)
+    {
+        $this->ark = $ark;
+    }
+
+
 }

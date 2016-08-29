@@ -16,6 +16,7 @@ class GMemcached {
     const PREFIX_USER = 'mirage_user_';
     const PREFIX_ITEMS = "items_";
     const PREFIX_DETAIL = "detail_";
+    const PREFIX_ARK = "ark_";
     
     const MEM_LIMIT_USER  = 3600;
     const MEM_LIMIT_GREE_MODERATION = 3600; //とりあえず1時間をリミットにしておいた 監査OKは24時間、監査中は3時間キャッシュできる
@@ -90,6 +91,12 @@ class GMemcached {
         $timestamp = microtime();
         $instance->set($key,$timestamp,0,0);
         return sha1($key.$timestamp);
+    }
+
+    public static function flushAll(){
+        $instance = self::factory();
+        $instance->flush();
+        return null;
     }
 
 }

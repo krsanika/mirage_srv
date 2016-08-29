@@ -35,10 +35,18 @@ class GMemcacheController extends Controller
     public function loadArksAction(){
         $arks = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findByIsEnabled(true);
         foreach($arks as $ark){
-            GMemcached::set('Ark_'.$ark->getArkId(), $ark, 0);
-            var_dump($ark->getArkId());
+            GMemcached::set(GMemcached::PREFIX_ARK.$ark->getArkId(), $ark, 0);
         };
 
+
+        return $this->redirect($this->generateUrl('cache_index'));
+    }
+
+    /**
+     * @Route("/flushAll", name="cache_flush_all")
+     */
+    public function flushAllAction(){
+        GMemcached::flushAll();
 
         return $this->redirect($this->generateUrl('cache_index'));
     }

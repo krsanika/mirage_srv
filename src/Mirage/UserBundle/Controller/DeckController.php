@@ -25,20 +25,24 @@ class DeckController extends Controller
      * @Route("/", name="get_deck")
      */
     public function getDeckAction(Request $request){
-        $idPlayer = $request->get('id_player');
-        $iDecks = $this->getDoctrine()->getRepository('MirageUserBundle:IDeck')->findByIdPlayer($idPlayer);
-        foreach($iDecks as $iDeck){
-            $iDeck->unsetPlayer();
-            foreach($iDeck->getArkPos() as $ark){
-                if(isset($ark)){
-                    $ark->unsetPlayer();
-                }
-            }
-        }
+//        $idPlayer = $request->get('id_player');
+//        $iDecks = $this->getDoctrine()->getRepository('MirageUserBundle:IDeck')->findByIdPlayer($idPlayer);
+//        foreach($iDecks as $iDeck){
+//            $iDeck->unsetPlayer();
+//            foreach($iDeck->getArkPos() as &$ark){
+//                if(isset($ark)){
+//                    $ark->unsetPlayer();
+//                    $ark->setArk(GMemcached::get('Ark_'.$ark->getIdArk()));
+//                }
+//            }
+//        }
 
+//        var_dump(GMemcached::get('Ark_101'));
+
+        $arks = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findByIsEnabled(true);
 
         $result = array(
-            'iDecks' => $iDecks
+            'iDecks' => $arks[0]
         );
         return new Response($this->objectToJson($result));
     }

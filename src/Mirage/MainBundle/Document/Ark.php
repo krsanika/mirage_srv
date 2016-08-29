@@ -12,7 +12,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Mirage\AdminBundle\Controller\GameConfig;
 
 /**
- * @MongoDB\Document(repositoryClass="Mirage\MainBundle\Repository\ArkRepository")
+ * @MongoDB\Document
  */
 class Ark
 {
@@ -63,9 +63,11 @@ class Ark
     protected $phases = array();
 
     /**
-     * @MongoDB\Bool
+     * @MongoDB\Boolean
      */
     protected $isEnabled;
+
+
 
     /**
      * @return mixed
@@ -230,41 +232,6 @@ class Ark
         $this->phases = $phases;
     }
 
-    /**
-     * Set isEnabled
-     *
-     * @param Bool $isEnabled
-     * @return self
-     */
-    public function setIsEnabled($isEnabled)
-    {
-        $this->isEnabled = $isEnabled;
-        return $this;
-    }
-
-    /**
-     * Get isEnabled
-     *
-     * @return Bool $isEnabled
-     */
-    public function getIsEnabled()
-    {
-        return $this->isEnabled;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //======Custom Function======================//
     public function outPhase($usePhaseId)
     {
         foreach($this->phases as $phase){
@@ -285,20 +252,22 @@ class Ark
         return $this;
     }
 
-    public function toArray()
+    /**
+     * @return mixed
+     */
+    public function getIsEnabled()
     {
-        return (array)$this;
+        return $this->isEnabled;
     }
-    public function editPlayerArkStatus($ark,$arkPhase)
+
+    /**
+     * @param mixed $isEnabled
+     */
+    public function setIsEnabled($isEnabled)
     {
-        $arrayThis = $this->toArray();
-
-//        var_dump(new ArrayCollection($ark));
-       // var_dump($arrayThis);
-        foreach($ark as $key => $value)
-        {
-        }
-
+        $this->isEnabled = $isEnabled;
         return $this;
     }
+
+
 }
