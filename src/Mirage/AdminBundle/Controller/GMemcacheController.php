@@ -13,6 +13,7 @@ use Mirage\UserBundle\Services\GMemcached;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Memcache;
 
 
 class GMemcacheController extends Controller
@@ -23,9 +24,11 @@ class GMemcacheController extends Controller
      * @Template()
      */
     public function IndexAction(){
-
-
-        return array();
+        global $kernel;
+        $memcache = new Memcache;
+        $memcache->connect($kernel->getContainer()->getParameter('memcache_host'), $kernel->getContainer()->getParameter('memcache_port'));
+        $stats = $memcache->getExtendedStats();
+        return array("stats"=>$stats);
     }
 
 
@@ -35,7 +38,7 @@ class GMemcacheController extends Controller
     public function loadArksAction(){
         $arks = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findByIsEnabled(true);
         foreach($arks as $ark){
-            GMemcached::set(GMemcached::PREFIX_ARK.$ark->getArkId(), $ark, 0);
+            GMemcached::set(GMemcached::PREFIX_ARK.$ark->getArkId(), $ark, 0, 0);
         };
 
 

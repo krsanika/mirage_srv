@@ -29,7 +29,7 @@ class GMemcached {
         }
 
         if (!self::$instance instanceof Memcache) {
-            self::$instance = new \Memcache($type);
+            self::$instance = new \Memcache(/* $type */);
             foreach(self::$configs as $config){
                 self::$instance->addServer($config['host'], $config['port']);
             }
@@ -101,4 +101,3 @@ class GMemcached {
 
 }
 
-?>

@@ -22,29 +22,38 @@ use Mirage\MainBundle\Document\Notification;
 class DeckController extends Controller
 {
     /**
-     * @Route("/", name="get_deck")
+     * @Route("/", name="getIDecks")
      */
-    public function getDeckAction(Request $request){
-//        $idPlayer = $request->get('id_player');
-//        $iDecks = $this->getDoctrine()->getRepository('MirageUserBundle:IDeck')->findByIdPlayer($idPlayer);
-//        foreach($iDecks as $iDeck){
-//            $iDeck->unsetPlayer();
-//            foreach($iDeck->getArkPos() as &$ark){
-//                if(isset($ark)){
-//                    $ark->unsetPlayer();
-//                    $ark->setArk(GMemcached::get('Ark_'.$ark->getIdArk()));
-//                }
-//            }
-//        }
+    public function getIDecksAction(Request $request){
+        $idPlayer = $request->get('id_player');
+        $iDecks = $this->getDoctrine()->getRepository('MirageUserBundle:IDeck')->findByIdPlayer($idPlayer);
+        foreach($iDecks as $iDeck){
+            $iDeck->unsetPlayer();
+            foreach($iDeck->getArkPos() as &$iArk){
+                if(isset($iArk)){
+                    $iArk->unsetPlayer();
+                    $ark = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findOneBy(array("isEnabled"=>true, "arkId"=>$iArk->getIdArk()));
+                    $iArk->setArk($ark);
+                }
+            }
+        }
+        return new Response($this->objectToJson($iDecks));
+    }
 
-//        var_dump(GMemcached::get('Ark_101'));
+    /**
+     * @Route("/change", name="change_deck")
+     */
+    public function changeDeckAction(Request $request){
+        $idPlayer = $request->get('id_player');
+        $idDeck =  $request->get('id_deck');
+        $deckPos = $request->get('deckPos');
 
-        $arks = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findByIsEnabled(true);
 
-        $result = array(
-            'iDecks' => $arks[0]
-        );
-        return new Response($this->objectToJson($result));
+
+
+
+        return $this->redirect($this->generateUrl('getIDecks'));
+//        return new Response(false);
     }
 
 

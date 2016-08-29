@@ -12,7 +12,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Mirage\AdminBundle\Controller\GameConfig;
 
 /**
- * @MongoDB\Document(repositoryClass="Mirage\MainBundle\Repository\ArkRepository")
+ * @MongoDB\Document()
  */
 class Ark
 {
@@ -63,19 +63,10 @@ class Ark
     protected $phases = array();
 
     /**
-<<<<<<< Updated upstream
      * @MongoDB\Bool
      */
     protected $isEnabled;
 
-=======
-     * @MongoDB\Boolean
-     */
-    protected $isEnabled;
-
-
-
->>>>>>> Stashed changes
     /**
      * @return mixed
      */
@@ -266,13 +257,6 @@ class Ark
 
 
 
-
-
-
-
-
-
-
     //======Custom Function======================//
     public function outPhase($usePhaseId)
     {
@@ -294,7 +278,6 @@ class Ark
         return $this;
     }
 
-<<<<<<< Updated upstream
     public function toArray()
     {
         return (array)$this;
@@ -311,24 +294,5 @@ class Ark
 
         return $this;
     }
-=======
-    /**
-     * @return mixed
-     */
-    public function getIsEnabled()
-    {
-        return $this->isEnabled;
-    }
 
-    /**
-     * @param mixed $isEnabled
-     */
-    public function setIsEnabled($isEnabled)
-    {
-        $this->isEnabled = $isEnabled;
-        return $this;
-    }
-
-
->>>>>>> Stashed changes
 }
