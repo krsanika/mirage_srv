@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * IDeck
  *
- * @ORM\Table(name="IDeck", indexes={@ORM\Index(name="FK_IDeck_Player", columns={"idPlayer"}), @ORM\Index(name="FK_IDeck_IArk_2", columns={"a2"}), @ORM\Index(name="FK_IDeck_IArk", columns={"a1"}), @ORM\Index(name="FK_IDeck_IArk_3", columns={"a3"}), @ORM\Index(name="FK_IDeck_IArk_4", columns={"b1"}), @ORM\Index(name="FK_IDeck_IArk_5", columns={"b2"}), @ORM\Index(name="FK_IDeck_IArk_6", columns={"b3"}), @ORM\Index(name="FK_IDeck_IArk_7", columns={"c1"}), @ORM\Index(name="FK_IDeck_IArk_8", columns={"c2"}), @ORM\Index(name="FK_IDeck_IArk_9", columns={"c3"})})
+ * @ORM\Table(name="IDeck", indexes={@ORM\Index(name="FK_IDeck_Player", columns={"idPlayer"}), @ORM\Index(name="FK_IDeck_IArk_1", columns={"a1"}), @ORM\Index(name="FK_IDeck_IArk", columns={"a0"}), @ORM\Index(name="FK_IDeck_IArk_2", columns={"a2"}), @ORM\Index(name="FK_IDeck_IArk_4", columns={"b0"}), @ORM\Index(name="FK_IDeck_IArk_5", columns={"b1"}), @ORM\Index(name="FK_IDeck_IArk_6", columns={"b2"}), @ORM\Index(name="FK_IDeck_IArk_7", columns={"c0"}), @ORM\Index(name="FK_IDeck_IArk_8", columns={"c1"}), @ORM\Index(name="FK_IDeck_IArk_9", columns={"c2"})})
  * @ORM\Entity(repositoryClass="Mirage\UserBundle\Repository\IDeckRepository")
  */
 class IDeck
@@ -57,6 +57,16 @@ class IDeck
      *
      * @ORM\ManyToOne(targetEntity="IArk")
      * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="a0", referencedColumnName="id")
+     * })
+     */
+    private $a0;
+
+    /**
+     * @var \IArk
+     *
+     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="a1", referencedColumnName="id")
      * })
      */
@@ -77,10 +87,10 @@ class IDeck
      *
      * @ORM\ManyToOne(targetEntity="IArk")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="a3", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="b0", referencedColumnName="id")
      * })
      */
-    private $a3;
+    private $b0;
 
     /**
      * @var \IArk
@@ -107,10 +117,10 @@ class IDeck
      *
      * @ORM\ManyToOne(targetEntity="IArk")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="b3", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="c0", referencedColumnName="id")
      * })
      */
-    private $b3;
+    private $c0;
 
     /**
      * @var \IArk
@@ -131,16 +141,6 @@ class IDeck
      * })
      */
     private $c2;
-
-    /**
-     * @var \IArk
-     *
-     * @ORM\ManyToOne(targetEntity="IArk")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="c3", referencedColumnName="id")
-     * })
-     */
-    private $c3;
 
     /**
      * @var \Player
@@ -261,6 +261,30 @@ class IDeck
     }
 
     /**
+     * Set a0
+     *
+     * @param IArk$a0
+     *
+     * @return IDeck
+     */
+    public function setA0(IArk $a0 = null)
+    {
+        $this->a0 = $a0;
+
+        return $this;
+    }
+
+    /**
+     * Get a0
+     *
+     * @return \Mirage\UserBundle\Entity\IArk
+     */
+    public function getA0()
+    {
+        return $this->a0;
+    }
+
+    /**
      * Set a1
      *
      * @param IArk$a1
@@ -309,27 +333,27 @@ class IDeck
     }
 
     /**
-     * Set a3
+     * Set b0
      *
-     * @param IArk$a3
+     * @param IArk$b0
      *
      * @return IDeck
      */
-    public function setA3(IArk $a3 = null)
+    public function setB0(IArk $b0 = null)
     {
-        $this->a3 = $a3;
+        $this->b0 = $b0;
 
         return $this;
     }
 
     /**
-     * Get a3
+     * Get b0
      *
      * @return \Mirage\UserBundle\Entity\IArk
      */
-    public function getA3()
+    public function getB0()
     {
-        return $this->a3;
+        return $this->b0;
     }
 
     /**
@@ -381,27 +405,27 @@ class IDeck
     }
 
     /**
-     * Set b3
+     * Set c0
      *
-     * @param IArk$b3
+     * @param IArk$c0
      *
      * @return IDeck
      */
-    public function setB3(IArk $b3 = null)
+    public function setC0(IArk $c0 = null)
     {
-        $this->b3 = $b3;
+        $this->c0 = $c0;
 
         return $this;
     }
 
     /**
-     * Get b3
+     * Get c0
      *
      * @return \Mirage\UserBundle\Entity\IArk
      */
-    public function getB3()
+    public function getC0()
     {
-        return $this->b3;
+        return $this->c0;
     }
 
     /**
@@ -453,30 +477,6 @@ class IDeck
     }
 
     /**
-     * Set c3
-     *
-     * @param IArk$c3
-     *
-     * @return IDeck
-     */
-    public function setC3(IArk $c3 = null)
-    {
-        $this->c3 = $c3;
-
-        return $this;
-    }
-
-    /**
-     * Get c3
-     *
-     * @return \Mirage\UserBundle\Entity\IArk
-     */
-    public function getC3()
-    {
-        return $this->c3;
-    }
-
-    /**
      * Set idPlayer
      *
      * @param \Mirage\UserBundle\Entity\Player $idPlayer
@@ -502,15 +502,15 @@ class IDeck
 
     public function getArkPos(){
         return array(
-            "A1"=>$this->getA1(),
-            "A2"=>$this->getA2(),
-            "A3"=>$this->getA3(),
-            "B1"=>$this->getB1(),
-            "B2"=>$this->getB2(),
-            "B3"=>$this->getB3(),
-            "C1"=>$this->getC1(),
-            "C2"=>$this->getC2(),
-            "C3"=>$this->getC3()
+            "a0"=>$this->getA0(),
+            "a1"=>$this->getA1(),
+            "a2"=>$this->getA2(),
+            "b0"=>$this->getB0(),
+            "b1"=>$this->getB1(),
+            "b2"=>$this->getB2(),
+            "c0"=>$this->getC0(),
+            "c1"=>$this->getC1(),
+            "c2"=>$this->getC2()
         );
     }
 

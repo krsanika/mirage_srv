@@ -69,13 +69,12 @@ class BattleController extends Controller
         );
     }
 
-    public function sumArk($difficulty, $enemiesInfo, $playerDeck, $playerArkPhases)
+    public function sumArk($difficulty, $enemiesInfo, $iDeck)
     {
         $enemies = $this->combineEnemy($difficulty, $enemiesInfo);
+        $playerArks = $this->combinePlayerArk($iDeck);
 
-        $playerArks = $this->combinePlayerArk($playerDeck, $playerArkPhases);
-
-        return array($enemies);
+        return array("Enemy"=>$enemies,"Player"=>$playerArks);
     }
 
     //적들의 레벨, hp, 스테이터스 수정치를 모두 합쳐 전투중 사용될 적 정보를 완성하는 펑션
@@ -106,29 +105,22 @@ class BattleController extends Controller
 
 
     //플레이어의 아크들 레벨, hp, 스테이터스 수정치를 모두 합쳐 전투중 사용될 아크 정보를 완성하는 펑션
-    public function combinePlayerArk($playerDeck, $playerArkPhases)
+    public function combinePlayerArk($iDeck)
     {
         $playerArks = null;
+        $iDeck->unsetPlayer();
+        foreach ($iDeck->getArkPos() as $position =>$iArk) {
+            if (isset($iArk)) {
+                $iArk->unsetPlayer();
+                $ark = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findOneBy(
+                    array("isEnabled" => true, "arkId" => $iArk->getIdArk())
+                );
+                $modifiedArk = $ark->combineIArk($iArk);
 
-        foreach ($playerDeck->getArkPos() as $position => $ark) {
-            if (isset($ark)) {
-                //$masterArk = GMemcached::get(GMemcached::PREFIX_ARK.$ark->getIdArk());
-                var_dump($ark->getIdArk());
-                $masterArk = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Ark')->findOneByArkId((int)$ark->getIdArk());
-                $ark->getUpdated();
-                var_dump(get_class($ark));
-                foreach ($playerArkPhases as $idIArk => $phase) {
-
-                    if(isset($ark)){
-                        if ($idIArk == $ark->getId()) {
-                            $arkPhase = $masterArk->editPlayerArkStatus((array)$ark, $phase);
-                        }
-                    }
-                }
-                $playerArks[$position] = $arkPhase;
+                $iArk->setArk($modifiedArk);
+                $playerArks[$position] = $iArk;
             }
         }
-
         return $playerArks;
     }
 

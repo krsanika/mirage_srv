@@ -391,4 +391,15 @@ class Phase
         return $this;
     }
 
+    public function combineIPhase($iPhase)
+    {
+        $this->hp = $iPhase->getHp();
+        $this->atk = $iPhase->getAtk();
+        $this->def = $iPhase->getDef();
+        $this->spd = $iPhase->getSpd();
+        $this->luk = $iPhase->getLuk();
+
+        return $this;
+    }
+
 }
