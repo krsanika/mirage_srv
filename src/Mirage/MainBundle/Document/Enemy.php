@@ -295,4 +295,13 @@ class Enemy
         $this->ark->deleteId();
         return $this;
     }
+
+    public function useBattle()
+    {
+        unset($this->mobId);
+
+        // unset($this->modify["hp"],$this->modify["atk"],$this->modify["def"],$this->modify["spd"],$this->modify["luk"]);
+        $this->deleteId();
+        return $this;
+    }
 }

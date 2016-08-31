@@ -474,31 +474,17 @@ class IArk
 
     public function useBattle()
     {
-        $a = $this->getUpdated();
-        if(isset($this->idCurrentPhase))
+
+        foreach($this->iPhases as $iPhase)
         {
-            $this->idCurrentPhase->useBattle();
+            $iPhase->useBattle();
         }
+//        if(isset($this->idCurrentPhase))
+//        {
+//            $this->idCurrentPhase->useBattle();
+//        }
         unset($this->id);
         unset($this->idPlayer);
-        unset($this->created);
-        unset($this->updated);
-        unset($this->isEnabled);
-        return $this;
-    }
-
-    public function deleteInfos()
-    {
-        $a = $this->getUpdated();
-        unset($this->idPlayer);
-        unset($this->lv);
-        unset($this->idCurrentPhase);
-        unset($this->currentHp );
-        unset($this->pointRelationship);
-        unset($this->exp);
-        unset($this->limitEquipmentSlot);
-        unset($this->isFavorited);
-        unset($this->lastBattleTime );
         unset($this->created);
         unset($this->updated);
         unset($this->isEnabled);

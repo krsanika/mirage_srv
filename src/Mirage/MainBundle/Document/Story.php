@@ -97,4 +97,24 @@ class Story
     }
 
 
+
+    /**
+     * Add chapter
+     *
+     * @param Mirage\MainBundle\Document\Chapter $chapter
+     */
+    public function addChapter(\Mirage\MainBundle\Document\Chapter $chapter)
+    {
+        $this->chapters[] = $chapter;
+    }
+
+    /**
+     * Remove chapter
+     *
+     * @param Mirage\MainBundle\Document\Chapter $chapter
+     */
+    public function removeChapter(\Mirage\MainBundle\Document\Chapter $chapter)
+    {
+        $this->chapters->removeElement($chapter);
+    }
 }

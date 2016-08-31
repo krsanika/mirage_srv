@@ -139,4 +139,94 @@ class Reward
     {
         return $this->isEnabled;
     }
+
+    /**
+     * Add item
+     *
+     * @param Mirage\MainBundle\Document\RewardItems $item
+     */
+    public function addItem(\Mirage\MainBundle\Document\RewardItems $item)
+    {
+        $this->items[] = $item;
+    }
+
+    /**
+     * Remove item
+     *
+     * @param Mirage\MainBundle\Document\RewardItems $item
+     */
+    public function removeItem(\Mirage\MainBundle\Document\RewardItems $item)
+    {
+        $this->items->removeElement($item);
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection $items
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Add equipment
+     *
+     * @param Mirage\MainBundle\Document\RewardEquipments $equipment
+     */
+    public function addEquipment(\Mirage\MainBundle\Document\RewardEquipments $equipment)
+    {
+        $this->equipments[] = $equipment;
+    }
+
+    /**
+     * Remove equipment
+     *
+     * @param Mirage\MainBundle\Document\RewardEquipments $equipment
+     */
+    public function removeEquipment(\Mirage\MainBundle\Document\RewardEquipments $equipment)
+    {
+        $this->equipments->removeElement($equipment);
+    }
+
+    /**
+     * Get equipments
+     *
+     * @return \Doctrine\Common\Collections\Collection $equipments
+     */
+    public function getEquipments()
+    {
+        return $this->equipments;
+    }
+
+    /**
+     * Add ark
+     *
+     * @param Mirage\MainBundle\Document\RewardArks $ark
+     */
+    public function addArk(\Mirage\MainBundle\Document\RewardArks $ark)
+    {
+        $this->arks[] = $ark;
+    }
+
+    /**
+     * Remove ark
+     *
+     * @param Mirage\MainBundle\Document\RewardArks $ark
+     */
+    public function removeArk(\Mirage\MainBundle\Document\RewardArks $ark)
+    {
+        $this->arks->removeElement($ark);
+    }
+
+    /**
+     * Get arks
+     *
+     * @return \Doctrine\Common\Collections\Collection $arks
+     */
+    public function getArks()
+    {
+        return $this->arks;
+    }
 }

@@ -36,8 +36,8 @@
         rewardId : {{ enc.bgmId }},
         bgType : {{ enc.bgmId }},
         yLength : {{ enc.bgmId }},
-        tilePos : {{enc.tilePos|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
-        enemyPos : {{enc.enemyPos|json_encode(constant('JSON_PRETTY_PRINT'))|raw}}
+        tilePositions : {{enc.tilePositions|json_encode(constant('JSON_PRETTY_PRINT'))|raw }},
+        enemyPositions : {{enc.enemyPositions|json_encode(constant('JSON_PRETTY_PRINT'))|raw}}
     };
 
 </script>

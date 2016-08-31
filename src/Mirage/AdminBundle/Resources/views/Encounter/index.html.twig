@@ -4,7 +4,7 @@
         <h1>Encounter Editer</h1><br><br>
         <select id="encSelector" class="" onchange="Encounter.changeEncId()">
             {% for enc in encs %}
-                <option value="{{ enc.encId }}">ID: {{ enc.encId }} 몹수 : {{ enc.enemyPos|length }} </option>
+                <option value="{{ enc.encId }}">ID: {{ enc.encId }} 몹수 : {{ enc.enemyPositions|length }} </option>
             {% endfor %}
         </select>
         <button class="button accept" onclick="Encounter.loadEncounter()">조우 불러오기</button>
@@ -14,7 +14,7 @@
         <br>
 
         <form id="load">
-            <input id='loadId' type="number" name="id" hidden></input>
+            <input id='loadId' type="number" name="id" hidden>
         </form>
         {% if editEnc is not null%}
             {% include 'MirageAdminBundle:Encounter:editer.html.twig' with {"enc" : editEnc, "json" : editEnc|json_encode|raw} %}

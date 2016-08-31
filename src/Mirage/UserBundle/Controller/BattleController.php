@@ -53,9 +53,9 @@ class BattleController extends Controller
 
                 $playerArkPhases = $em->getRepository('MirageUserBundle:IArkPhase')->loadArkPhaseByIdIArk($iDeck);
 
-                $arks = $this->sumArk($difficulty, $encounter->getEnemyPos(), $iDeck);
+                $arks = $this->sumArk($difficulty, $encounter->getEnemyPositions(), $iDeck);
 
-                $info = array("mapInfo" => $encounter->getStageInfo(), "arks" => $arks);
+                $info = array("mapInfo" => $encounter->getStageInfo(), "arkInfo" => $arks);
 
             } else {
                 $info = "현재 운영되지 않는 던전입니다.";
@@ -74,7 +74,7 @@ class BattleController extends Controller
         $enemies = $this->combineEnemy($difficulty, $enemiesInfo);
         $playerArks = $this->combinePlayerArk($iDeck);
 
-        return array("Enemy"=>$enemies,"Player"=>$playerArks);
+        return array("enemy"=>$enemies,"player"=>$playerArks);
     }
 
     //적들의 레벨, hp, 스테이터스 수정치를 모두 합쳐 전투중 사용될 적 정보를 완성하는 펑션
@@ -96,7 +96,8 @@ class BattleController extends Controller
                 $enemyModifer["luk"]
             );
             $totalInfo = array();
-            // $enemy = $enemy->deleteId();
+          //  $enemy = $enemy->deleteId();
+            $enemy = $enemy->useBattle();
             $enemies[$enemyInfo->getPosition()] = $enemy;
         }
 
@@ -117,6 +118,8 @@ class BattleController extends Controller
                 );
                 $modifiedArk = $ark->combineIArk($iArk);
 
+                $modifiedArk = $modifiedArk->deleteId();
+                $iArk->useBattle();
                 $iArk->setArk($modifiedArk);
                 $playerArks[$position] = $iArk;
             }

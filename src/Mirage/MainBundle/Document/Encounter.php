@@ -8,7 +8,6 @@
 
 namespace Mirage\MainBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use Mirage\MainBundle\Document\EnemyPos;
 use Mirage\MainBundle\Document\StageInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -20,7 +19,7 @@ class Encounter
 {
     public function __construct()
     {
-        $this->enemyPos = new ArrayCollection();
+        $this->enemyPositions = new ArrayCollection();
     }
 
     /**
@@ -40,10 +39,10 @@ class Encounter
     protected $stageInfo;
 
     /**
-     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\EnemyPos>")
-     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\EnemyPos")
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\EnemyPosition>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\EnemyPosition")
      */
-    protected $enemyPos = array();
+    protected $enemyPositions = array();
 
     /**
      * @MongoDB\Field(name="eventTrigger", type="hash")
@@ -153,43 +152,59 @@ class Encounter
         $this->stageInfo->removeElement($stageInfo);
     }
 
+
+
     /**
-     * @return mixed
+     * Add enemyPosition
+     *
+     * @param Mirage\MainBundle\Document\EnemyPosition $enemyPosition
      */
-    public function getEnemyPos()
+    public function addEnemyPosition(\Mirage\MainBundle\Document\EnemyPosition $enemyPosition)
     {
-        return $this->enemyPos;
+        $this->enemyPositions[] = $enemyPosition;
     }
 
-    public function getEnemy($tilePos = null){
-        if(empty($tilePos)){
-            return $this->enemyPos->first();
+    /**
+     * Remove enemyPosition
+     *
+     * @param Mirage\MainBundle\Document\EnemyPosition $enemyPosition
+     */
+    public function removeEnemyPosition(\Mirage\MainBundle\Document\EnemyPosition $enemyPosition)
+    {
+        $this->enemyPositions->removeElement($enemyPosition);
+    }
+
+    /**
+     * Get enemyPositions
+     *
+     * @return \Doctrine\Common\Collections\Collection $enemyPositions
+     */
+    public function getEnemyPositions()
+    {
+        return $this->enemyPositions;
+    }
+
+    public function getEnemy($tilePositions = null){
+        if(empty($tilePositions)){
+            return $this->enemyPositions->first();
         }
-        foreach($this->enemyPos as $enemyPo){
-            if($enemyPo->getPosition() == $tilePos ){
-                return $enemyPo->getEnemy();
+        foreach($this->enemyPositions as $enemyPostion){
+            if($enemyPostion->getPosition() == $tilePositions ){
+                return $enemyPostion->getEnemy();
             }
         }
     }
 
     public function addEnemy(Enemy $enemy){
-        if($this->enemyPos->contains($enemy)){
-            $this->enemyPos->add($enemy);
+        if($this->enemyPositions->contains($enemy)){
+            $this->enemyPositions->add($enemy);
         }
         return $this;
     }
 
     public function removeEnemy($enemy){
-        $this->enemyPos->removeElement($enemy);
+        $this->enemyPositions->removeElement($enemy);
         return $this;
-    }
-
-    /**
-     * @param mixed $enemyPos
-     */
-    public function setEnemyPos($enemyPos)
-    {
-        $this->enemyPos = $enemyPos;
     }
 
     /**
@@ -282,29 +297,6 @@ class Encounter
     }
 
     /**
-     * Add enemyPos
-     *
-     * @param EnemyPos $enemyPos
-     * @return self
-     */
-    public function addEnemyPos(EnemyPos $enemyPos)
-    {
-        $this->enemyPos[] = $enemyPos;
-    }
-
-
-    /**
-     * Remove enemyPos
-     *
-     * @param EnemyPos $enemyPos
-     * @return self
-     */
-    public function removeEnemyPos(EnemyPos $enemyPos)
-    {
-        $this->enemyPos->removeElement($enemyPos);
-    }
-
-    /**
      * Set reward
      *
      * @param Mirage\MainBundle\Document\Reward $reward
@@ -329,32 +321,10 @@ class Encounter
     public function deleteId()
     {
         unset($this->id);
-        foreach($this->enemyPos as $enemyInfo){
+        foreach($this->enemyPositions as $enemyInfo){
             $enemyInfo->deleteId();
         }
         return $this;
-    }
-
-
-
-    /**
-     * Add enemyPo
-     *
-     * @param Mirage\MainBundle\Document\EnemyPos $enemyPo
-     */
-    public function addEnemyPo(\Mirage\MainBundle\Document\EnemyPos $enemyPo)
-    {
-        $this->enemyPos[] = $enemyPo;
-    }
-
-    /**
-     * Remove enemyPo
-     *
-     * @param Mirage\MainBundle\Document\EnemyPos $enemyPo
-     */
-    public function removeEnemyPo(\Mirage\MainBundle\Document\EnemyPos $enemyPo)
-    {
-        $this->enemyPos->removeElement($enemyPo);
     }
 
     /**
@@ -367,6 +337,7 @@ class Encounter
 
     /**
      * @param mixed $enemyCount
+     * @return $this
      */
     public function setEnemyCount($enemyCount)
     {
@@ -381,12 +352,8 @@ class Encounter
         unset($this->endDay);
         unset($this->isEnabled);
         unset($this->id);
-        unset($this->enemyPos);
+        unset($this->enemyPositions);
         return $this;
-    }
-
-    public function unsetEnemyPos(){
-
     }
 
 }

@@ -19,7 +19,7 @@ class StageInfo
 {
     public function __construct()
     {
-        $this->tilePos = new ArrayCollection();
+        $this->tilePositions = new ArrayCollection();
     }
 
 
@@ -44,9 +44,9 @@ class StageInfo
     protected $defaultTile;
 
     /**
-     * @MongoDB\Field(name="tilePos", type="hash")
+     * @MongoDB\Field(name="tilePositions", type="hash")
      */
-    protected $tilePos = array();
+    protected $tilePositions = array();
 
     /**
      * Set backgroundId
@@ -137,26 +137,24 @@ class StageInfo
     }
 
     /**
-     * Set tilePos
+     * Set tilePositions
      *
-     * @param hash $tilePos
+     * @param hash $tilePositions
      * @return self
      */
-    public function setTilePos($tilePos)
+    public function setTilePositions($tilePositions)
     {
-        $this->tilePos = $tilePos;
+        $this->tilePositions = $tilePositions;
         return $this;
     }
 
     /**
-     * Get tilePos
+     * Get tilePositions
      *
-     * @return hash $tilePos
+     * @return hash $tilePositions
      */
-    public function getTilePos()
+    public function getTilePositions()
     {
-        return $this->tilePos;
+        return $this->tilePositions;
     }
-
-
 }

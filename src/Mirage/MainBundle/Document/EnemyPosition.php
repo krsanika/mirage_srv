@@ -14,7 +14,7 @@ use JMS\Serializer\Annotation\Type;
 /**
  * @MongoDB\EmbeddedDocument
  */
-class EnemyPos
+class EnemyPosition
 {
     public function __construct()
     {

@@ -36,7 +36,7 @@ class StoryController extends Controller
                     $encounter = new Encounter();
                     $encounter->setEncId($oriEnc->getEncId());
                     $encounter->setReward($oriEnc->getReward());
-                    $encounter->setEnemyCount(count($oriEnc->getEnemyPos()));
+                    $encounter->setEnemyCount(count($oriEnc->getEnemyPositions()));
                     $encounter->remakeForStoryView();
                     $episode->setEncounter($encounter);
                 }

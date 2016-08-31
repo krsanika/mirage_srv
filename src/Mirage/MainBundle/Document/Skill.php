@@ -63,6 +63,12 @@ class Skill
      */
     protected $target;
 
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $consume;
+
     /**
      * @MongoDB\String
      */
@@ -314,5 +320,27 @@ class Skill
         unset($this->id);
 
         return $this;
+    }
+
+    /**
+     * Set consume
+     *
+     * @param int $consume
+     * @return self
+     */
+    public function setConsume($consume)
+    {
+        $this->consume = $consume;
+        return $this;
+    }
+
+    /**
+     * Get consume
+     *
+     * @return int $consume
+     */
+    public function getConsume()
+    {
+        return $this->consume;
     }
 }

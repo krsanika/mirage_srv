@@ -91,4 +91,24 @@ class Chapter
     }
 
 
+
+    /**
+     * Add episode
+     *
+     * @param Mirage\MainBundle\Document\Episode $episode
+     */
+    public function addEpisode(\Mirage\MainBundle\Document\Episode $episode)
+    {
+        $this->episodes[] = $episode;
+    }
+
+    /**
+     * Remove episode
+     *
+     * @param Mirage\MainBundle\Document\Episode $episode
+     */
+    public function removeEpisode(\Mirage\MainBundle\Document\Episode $episode)
+    {
+        $this->episodes->removeElement($episode);
+    }
 }
