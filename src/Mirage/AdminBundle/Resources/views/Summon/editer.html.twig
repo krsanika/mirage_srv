@@ -1,0 +1,74 @@
+<div id="summon">
+{{ form_start(form) }}
+{{ form_row(form.idSummon) }}
+소환명 : {{ form.vars.value.idSummon | str('summon','name') }}
+<input id="summonnameText" type="text" value="{{ form.vars.value.idSummon | str('summon','name') }}">
+<button onclick="All.sendChangeXml('summon', {{form.vars.value.idSummon}}, 'name')">텍스트 변경</button>
+
+{{ form_row(form.idOrigin) }}
+{{ form_row(form.targetType) }}
+
+<b>가챠항목</b>
+<div class="summonMode">
+    {% for mode in form.summonModes %}
+    <div class="phase">
+        {{ form_row(mode.idMode) }}
+        모드명 : {{ mode.vars.value.idMode | str('summon','name') }}
+        <input id="summonnameText" type="text" value="{{ mode.vars.value.idMode | str('summon','name') }}">
+        <button onclick="All.sendChangeXml('summon', {{mode.vars.value.idMode}}, 'name')">텍스트 변경</button>
+
+        {{ form_row(mode.billingType) }}
+        {{ form_row(mode.price) }}
+        {{ form_row(mode.drawCount) }}
+        {{ form_row(mode.minGrade) }}
+        {{ form_row(mode.isRepeat) }}
+        {{ form_label(mode.startDay) }}{{ form_widget(mode.startDay) }} {{ mode.vars.value.startDay |date('y년 m월 d일 h:m:s') }}
+        <br>
+        {{ form_label(mode.endDay) }}{{ form_widget(mode.endDay) }} {{ mode.vars.value.endDay |date('y년 m월 d일 h:m:s') }}
+    </div>
+    {% endfor %}
+</div>
+<br><br>
+<b>가챠테이블</b>
+<div id="summonTable">
+    {% for table in form.summonTables %}
+    <div class="gachaTable">
+        {{ form_row(table.grade) }}
+        {{ form_row(table.gravity) }}
+        {% for item in table.items  %}
+            <div class="itemBox">
+                {{ form_row(item) }}
+            </div>
+        {% endfor %}
+
+    </div>
+    {% endfor %}
+
+{% if form.vars.value.targetType == 1 %}
+    {% set genre = "phase" %}
+{% elseif form.vars.value.targetType == 2 %}
+    {% set genre = "equipment" %}
+{% elseif form.vars.value.targetType == 3 %}
+    {% set genre = "item" %}
+{% endif %}
+
+    <div id="gravityBar">
+
+    {% for rate in rates %}
+        <div class="grade{{rate.grade}}" style="height:{{ rate.rate }}" >
+            <abbr title="{{ rate.rate }}">{{ rate.id |str(genre, 'name') }}</abbr>
+        </div>
+    {% endfor %}
+
+</div>
+</div>
+
+{{ form_end(form) }}
+
+
+
+</div>
+
+<script>
+
+</script>

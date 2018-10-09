@@ -23,11 +23,6 @@ class Chapter
     protected $chapterId;
 
     /**
-     * @MongoDB\Int
-     */
-    protected $chapterNameCode;
-
-    /**
      * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\Episode")
      * @Type("ArrayCollection<Mirage\MainBundle\Document\Episode>")
      */

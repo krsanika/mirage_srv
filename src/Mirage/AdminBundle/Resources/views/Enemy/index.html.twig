@@ -1,0 +1,30 @@
+{% extends 'MirageAdminBundle::layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+        <h1>Enemy Editer</h1><br><br>
+        <select id="idSelector" class="" onchange="All.changeIdSelector()">
+            {% for enemy in enemyAll %}
+                <option value="{{ enemy.idEnemy }}">ID. {{ enemy.idEnemy }} : {{ enemy.idEnemy | str('enemy', 'name') }}  </option>
+            {% endfor %}
+        </select>
+        <button class="button accept" onclick="All.load()">에너미 불러오기</button>
+        <button class="button" onclick="All.create()">에너미 신규제작</button>
+        {#<button class="button">에너미 비활성화</button>#}
+        <button class="button cancle">!에너미 삭제</button>
+        <br>
+
+        <form id="load">
+            <input id='loadId' type="number" name="id" hidden>
+        </form>
+        {% if editEnemy is not null%}
+            {% include 'MirageAdminBundle:Enemy:editer.html.twig' with {"enemy" : editEnemy, "json" : editEnemy|json_encode|raw, "form" : form, 'tags' : tags} %}
+        {%  endif %}
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('/bundles/admin/js/all.js')}}" type="text/javascript"></script>
+
+{% endblock %}

@@ -12,6 +12,8 @@ use Mirage\UserBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Mirage\AdminBundle\Form\Type\EncounterType;
+use Mirage\MainBundle\Document\Encounter;
 
 class EncounterController extends Controller
 {
@@ -20,15 +22,46 @@ class EncounterController extends Controller
      * @Template()
      */
     public function indexAction(Request $request){
+        $encAll = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Encounter')->findAll();
         $id = $request->get('id');
         $editEnc = null;
-        if(!empty($id)){
-            $editEnc = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Encounter')->findOneByEncId((int)$id);
+        $formView = null;
+
+        if(isset($id)){
+            if($id == 0) $editEnc = new Encounter();
+            else{
+                $editEnc = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Encounter')->findOneByIdEnc((int)$id);
+            }
+
+            $editForm = $this->createForm(EncounterType::class, $editEnc);
+            $formView = $editForm->createView();
+            $editForm->handleRequest($request);
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                // ... perform some action, such as saving the task to the database
+                $encounter = $editForm->getData();
+                $dm = $this->get('doctrine_mongodb')->getManager();
+                //new하면 캐스케이드해야하는듯.
+                foreach($encounter->getTiles() as &$tile){
+                    $enemy = $dm->getRepository('MirageMainBundle:Enemy')->findOneByIdEnemy((int)$tile->getEnemy()->getIdEnemy());
+                    if(isset($enemy)){
+                        $tile->setEnemy($enemy);
+                    }else continue;
+                }
+                $reward = $dm->getRepository('MirageMainBundle:Reward')->findOneByIdReward((int)$encounter->getReward()->getIdReward());
+                var_dump((int)$encounter->getReward()->getIdReward());
+                $encounter->setReward($reward);
+                /*
+                foreach($encounter->getTriggers() as $trigger){
+                    $dm->persist($trigger);
+                }
+                */
+                $dm->merge($encounter);
+                $dm->flush();
+                return $this->redirectToRoute('encounter_index');
+            }
+
         }
-
-        $encs = $this->get('doctrine_mongodb')->getRepository('MirageMainBundle:Encounter')->findAll();
-
-        return array("encs"=>$encs, "editEnc"=>$editEnc);
+        return array("encAll" => $encAll, 'editEnc'=>$editEnc, 'form'=>$formView);
     }
 
 

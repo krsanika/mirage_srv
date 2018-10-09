@@ -7,14 +7,14 @@
  */
 
 namespace Mirage\MainBundle\Document;
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\Common\Collections\ArrayCollection;
-use Mirage\AdminBundle\Controller\GameConfig;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Mirage\MainBundle\Game\GameConfig;
+use JMS\Serializer\Annotation\Type as JMSType;
 
 /**
  * @MongoDB\Document
  */
-
 class Item
 {
     /**
@@ -25,23 +25,33 @@ class Item
     /**
      * @MongoDB\Int
      */
-    protected $itemId;
+    protected $idItem;
 
     /**
-     * @MongoDB\String
-     */
-    protected $name_kr;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $name_jp;
-
-    /**
-     * @MongoDB\String
+     * @MongoDB\Int
      */
     protected $effect;
+    /**
+     * @MongoDB\Int
+     */
 
+    protected $effectSize;
+
+    /**
+     * @return mixed
+     */
+    public function getEffectSize()
+    {
+        return $this->effectSize;
+    }
+
+    /**
+     * @param mixed $effectSize
+     */
+    public function setEffectSize($effectSize)
+    {
+        $this->effectSize = $effectSize;
+    }
     /**
      * @MongoDB\Int
      */
@@ -58,10 +68,20 @@ class Item
     protected $material;
 
     /**
-     * @MongoDB\String
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\ItemCombine>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\ItemCombine")
      */
-    protected $description;
+    protected $combine = array();
 
+    /**
+     * Item constructor.
+     * @param array $combine
+     */
+    public function __construct()
+    {
+        $this->combine = new ArrayCollection();
+        $this->combine->add(new ItemCombine());
+    }
 
 
     /**
@@ -80,9 +100,9 @@ class Item
      * @param int $itemId
      * @return self
      */
-    public function setItemId($itemId)
+    public function setIdItem($idItem)
     {
-        $this->itemId = $itemId;
+        $this->idItem = $idItem;
         return $this;
     }
 
@@ -91,53 +111,9 @@ class Item
      *
      * @return int $itemId
      */
-    public function getItemId()
+    public function getIdItem()
     {
-        return $this->itemId;
-    }
-
-    /**
-     * Set nameKr
-     *
-     * @param string $nameKr
-     * @return self
-     */
-    public function setNameKr($nameKr)
-    {
-        $this->name_kr = $nameKr;
-        return $this;
-    }
-
-    /**
-     * Get nameKr
-     *
-     * @return string $nameKr
-     */
-    public function getNameKr()
-    {
-        return $this->name_kr;
-    }
-
-    /**
-     * Set nameJp
-     *
-     * @param string $nameJp
-     * @return self
-     */
-    public function setNameJp($nameJp)
-    {
-        $this->name_jp = $nameJp;
-        return $this;
-    }
-
-    /**
-     * Get nameJp
-     *
-     * @return string $nameJp
-     */
-    public function getNameJp()
-    {
-        return $this->name_jp;
+        return $this->idItem;
     }
 
     /**
@@ -229,24 +205,27 @@ class Item
     }
 
     /**
-     * Set description
-     *
-     * @param string $description
-     * @return self
+     * @return mixed
      */
-    public function setDescription($description)
+    public function getCombine()
     {
-        $this->description = $description;
-        return $this;
+        return $this->combine;
     }
 
     /**
-     * Get description
-     *
-     * @return string $description
+     * @param mixed $combine
      */
-    public function getDescription()
+    public function setCombine($combine)
     {
-        return $this->description;
+        $this->combine = $combine;
     }
+
+
+    public function deleteId()
+    {
+        unset($this->id);
+        
+        return $this;
+    }
+
 }

@@ -26,7 +26,7 @@ class Enemy
     /**
      * @MongoDB\Int
      */
-    protected $mobId;
+    protected $idEnemy;
 
     /**
      * @JMSType("Mirage\MainBundle\Document\Ark")
@@ -37,7 +37,7 @@ class Enemy
     /**
      * @MongoDB\Int
      */
-    protected $phaseId;
+    protected $idPhase;
 
     /**
      * @MongoDB\Int
@@ -47,17 +47,18 @@ class Enemy
     /**
      * @MongoDB\Int
      */
-    protected $skillOpen;
+    protected $dressUp;
 
     /**
-     * @MongoDB\String
+     * @MongoDB\Int
      */
-    protected $description;
+    protected $dignity;
 
     /**
-     * @MongoDB\Collection
+     * @MongoDB\EmbedOne(targetDocument="Mirage\MainBundle\Document\EnemyModify")
+     * @JMSType("Mirage\MainBundle\Document\EnemyModify")
      */
-    protected $modify = array();
+    protected $modify;
 
     /**
      * @JMSType("ArrayCollection<Mirage\MainBundle\Document\Equipment>")
@@ -68,7 +69,6 @@ class Enemy
 
     public function __construct()
     {
-        $this->modify = new ArrayCollection();
         $this->equipments = new ArrayCollection();
     }
 
@@ -82,27 +82,26 @@ class Enemy
         return $this->id;
     }
 
-
     /**
-     * Set mobId
+     * Set idEnemy
      *
-     * @param int $mobId
+     * @param int $idEnemy
      * @return self
      */
-    public function setMobId($mobId)
+    public function setIdEnemy($idEnemy)
     {
-        $this->mobId = $mobId;
+        $this->idEnemy = $idEnemy;
         return $this;
     }
 
     /**
-     * Get mobId
+     * Get idEnemy
      *
-     * @return int $mobId
+     * @return int $idEnemy
      */
-    public function getMobId()
+    public function getIdEnemy()
     {
-        return $this->mobId;
+        return $this->idEnemy;
     }
 
 
@@ -128,9 +127,9 @@ class Enemy
      * @param int $phaseId
      * @return self
      */
-    public function setPhaseId($phaseId)
+    public function setIdPhase($idPhase)
     {
-        $this->phaseId = $phaseId;
+        $this->idPhase = $idPhase;
         return $this;
     }
 
@@ -139,9 +138,9 @@ class Enemy
      *
      * @return int $phaseId
      */
-    public function getPhaseId()
+    public function getIdPhase()
     {
-        return $this->phaseId;
+        return $this->idPhase;
     }
 
     /**
@@ -167,77 +166,41 @@ class Enemy
     }
 
     /**
-     * Set skillOpen
-     *
-     * @param int $skillOpen
-     * @return self
+     * @return mixed
      */
-    public function setSkillOpen($skillOpen)
+    public function getDressUp()
     {
-        $this->skillOpen = $skillOpen;
-        return $this;
+        return $this->dressUp;
     }
 
     /**
-     * Get skillOpen
-     *
-     * @return int $skillOpen
+     * @param mixed $dressUp
      */
-    public function getSkillOpen()
+    public function setDressUp($dressUp)
     {
-        return $this->skillOpen;
+        $this->dressUp = $dressUp;
     }
 
     /**
-     * Set description
-     *
-     * @param string $description
-     * @return self
+     * @return mixed
      */
-    public function setDescription($description)
+    public function getDignity()
     {
-        $this->description = $description;
-        return $this;
+        return $this->dignity;
     }
 
     /**
-     * Get description
-     *
-     * @return string $description
+     * @param mixed $dignity
      */
-    public function getDescription()
+    public function setDignity($dignity)
     {
-        return $this->description;
+        $this->dignity = $dignity;
     }
-
-    /**
-     * Set modify
-     *
-     * @param collection $modify
-     * @return self
-     */
-    public function setModify($modify)
-    {
-        $this->modify = $modify;
-        return $this;
-    }
-
-    /**
-     * Get modify
-     *
-     * @return collection $modify
-     */
-    public function getModify()
-    {
-        return $this->modify;
-    }
-
-
+    
     public function addEquipment(Equipment $equipment)
     {
         $this->equipments[] = $equipment;
     }
-
 
     public function removeEquipment(Equipment $equipment)
     {
@@ -266,18 +229,16 @@ class Enemy
         return $this->equipments;
     }
 
-
     public function addArk(\Mirage\MainBundle\Document\Ark $ark)
     {
         $this->ark[] = $ark;
     }
 
-
     public function removeArk(\Mirage\MainBundle\Document\Ark $ark)
     {
         $this->ark->removeElement($ark);
     }
-
+//=================================================
     public function testUnset($phaseId)
     {
         unset($this->equipments);
@@ -298,10 +259,31 @@ class Enemy
 
     public function useBattle()
     {
-        unset($this->mobId);
-
+        unset($this->idEnemy);
+        unset($this->modify);
         // unset($this->modify["hp"],$this->modify["atk"],$this->modify["def"],$this->modify["spd"],$this->modify["luk"]);
         $this->deleteId();
         return $this;
+    }
+
+    public function replaceModify()
+    {
+        return $this->ark->replacePhase($this->idPhase,$this->modify);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModify()
+    {
+        return $this->modify;
+    }
+
+    /**
+     * @param mixed $modify
+     */
+    public function setModify($modify)
+    {
+        $this->modify = $modify;
     }
 }

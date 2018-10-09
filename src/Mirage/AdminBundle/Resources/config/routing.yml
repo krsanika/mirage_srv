@@ -13,8 +13,56 @@ Ark:
     type : annotation
     resource : "@MirageAdminBundle/Controller/ArkController.php"
 
+Skill:
+    prefix : /skill
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/SkillController.php"
+
+Equipment:
+    prefix : /equipment
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/EquipmentController.php"
+
+Item:
+    prefix : /item
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/ItemController.php"
+
+Reward:
+    prefix : /reward
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/RewardController.php"
+
+Shop:
+    prefix : /shop
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/ShopController.php"
+Enemy:
+    prefix : /enemy
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/EnemyController.php"
+
+DeckSetting:
+    prefix : /deckSetting
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/DeckSettingController.php"
+
+Gacha:
+    prefix : /gacha
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/SummonController.php"
 
 Cache:
     prefix : /cache
     type : annotation
     resource : "@MirageAdminBundle/Controller/GMemcacheController.php"
+
+Deal:
+    prefix : /deal
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/DealController.php"
+
+WebSocket:
+    prefix : /websocket
+    type : annotation
+    resource : "@MirageAdminBundle/Controller/WebSocketController.php"

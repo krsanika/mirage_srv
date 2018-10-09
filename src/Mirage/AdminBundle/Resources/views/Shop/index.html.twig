@@ -1,0 +1,28 @@
+{% extends 'MirageAdminBundle::layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+        <h1>Shop Editer</h1><br><br>
+        <select id="idSelector" class="" onchange="All.changeIdSelector()">
+            {% for shop in shopAll %}
+                <option value="{{ shop.idShop }}">ID. {{ shop.idShop }} : {{shop.idShop |str('shop', 'name')}} </option>
+            {% endfor %}
+        </select>
+        <button class="button accept" onclick="All.load()">아이템 불러오기</button>
+        <button class="button create" onclick="All.create()">아이템 신규제작</button>
+        <br>
+
+        <form id="load">
+            <input id='loadId' type="number" name="id" hidden>
+        </form>
+        {% if editShop is not null%}
+            {% include 'MirageAdminBundle:Shop:editer.html.twig' with {"shop" : editShop, "json" : editShop|json_encode|raw, "form" : form} %}
+        {%  endif %}
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('/bundles/admin/js/all.js')}}" type="text/javascript"></script>
+
+{% endblock %}

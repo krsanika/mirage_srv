@@ -1,23 +1,21 @@
-{% extends 'MirageAdminBundle:layout.html.twig' %}
+{% extends 'MirageAdminBundle::layout.html.twig' %}
 {% block contents %}
     <div id="content">
         <h1>Encounter Editer</h1><br><br>
-        <select id="encSelector" class="" onchange="Encounter.changeEncId()">
-            {% for enc in encs %}
-                <option value="{{ enc.encId }}">ID: {{ enc.encId }} 몹수 : {{ enc.enemyPositions|length }} </option>
+        <select id="idSelector" class="" onchange="All.changeIdSelector()">
+            {% for enc in encAll %}
+                <option value="{{ enc.idEnc }}">ID: {{ enc.idEnc }} </option>
             {% endfor %}
         </select>
-        <button class="button accept" onclick="Encounter.loadEncounter()">조우 불러오기</button>
-        <button class="button">조우 신규제작</button>
-        <button class="button">조우 비활성화</button>
-        <button class="button cancle">조우 삭제</button>
+        <button class="button accept" onclick="All.load()">조우 불러오기</button>
+        <button class="button"  onclick="All.create()">조우 신규제작</button>
         <br>
 
         <form id="load">
             <input id='loadId' type="number" name="id" hidden>
         </form>
         {% if editEnc is not null%}
-            {% include 'MirageAdminBundle:Encounter:editer.html.twig' with {"enc" : editEnc, "json" : editEnc|json_encode|raw} %}
+            {% include 'MirageAdminBundle:Encounter:editer.html.twig' with {"enc" : editEnc, "form" : form} %}
         {%  endif %}
     </div>
 {% endblock contents %}
@@ -25,6 +23,7 @@
 {% block javascripts %}
 {{ parent() }}
 <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+<script src="{{asset('/bundles/admin/js/all.js')}}" type="text/javascript"></script>
 <script src="{{asset('/bundles/admin/js/encounter.js')}}" type="text/javascript"></script>
 
 {% endblock %}

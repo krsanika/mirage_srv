@@ -1,18 +1,123 @@
-<div id="ark">
+<div class="ark">
     {{ form_start(form) }}
-    {{ form_row(form.arkId) }}
-    {{ form_row(form.name_kr) }}
-    {{ form_row(form.name_jp) }}
+    {{ form_row(form.idArk) }}
+    아크명　<b>{{ form.vars.value.idArk | str('ark','name') }} </b>
+    <input id="arknameText" type="text" value="{{ form.vars.value.idArk | str('ark','name')}}">
+    <button onclick="All.sendChangeXml('ark', {{form.vars.value.idArk}}, 'name')">텍스트 변경</button>
+
     {{ form_row(form.title) }}
     {{ form_row(form.origin) }}
-    {{ form_row(form.phases) }}
-    {{ form_row(form.descript) }}
+    아크설명 {{ form.vars.value.idArk | str('ark','description') }}<br>
+    <input id="arkdescriptionText" class="textArea" type="textarea" value="{{ form.vars.value.idArk | str('ark','description') }}">
+    <button onclick="All.sendChangeXml('ark', {{form.vars.value.idArk}}, 'description')">텍스트 변경</button>
+    {{ form_row(form.isEnabled) }}
+
+
+        {% for phase in form.phases %}
+        <div class="phase">
+            {{ form_row(phase.idPhase) }}
+
+
+            이름　　 : <b>{{ phase.vars.value.idPhase | str('phase','name')}}</b>
+            <input id="phasenameText" type="text" value="{{ phase.vars.value.idPhase | str('phase','name')}}">
+            <button onclick="All.sendChangeXml('phase', {{phase.vars.value.idPhase}}, 'name')">텍스트 변경</button>
+
+            {{ form_row(phase.type) }}
+            {{ form_row(phase.grade) }}
+            {{ form_row(phase.atk) }}
+            {{ form_row(phase.def) }}
+            {{ form_row(phase.agi) }}
+            {{ form_row(phase.con) }}
+            <div class="ori_tags">
+            {% for tag in phase.tags %}
+                {{ form_row(tag)}}
+            {% endfor %}
+            </div>
+            스킬
+            {% for skill in phase.skills %}
+                <button class="toSkill" onclick="Ark.toSkillEditor({{ skill.vars.value.idSkill }})">
+                    {{form_row(skill)}}
+                    {{ skill.vars.value.idSkill |str('skill', 'name')}}
+                </button>
+
+            {% endfor %}
+            <div>
+
+            </div>
+            설명문　 : {{ phase.vars.value.idPhase | str('phase', 'description')}}
+            {{ form_row(phase.isEnabled) }}
+        </div>
+        {% endfor %}
+
     {{ form_row(form.save) }}
     {{ form_end(form) }}
 </div>
-<br>
-<div id="ori_tags">
-{% for key, value in tags %}
-    <input id="oribox{{key}}" type="checkbox" value="{{key}}">{{ value }}
-{%  endfor %}
+<button class="button" disabled>아크 비활성화</button>
+<button class="button cancle" disabled>!아크 삭제</button>
+<button class="button" onclick="Ark.switchTagTable()">태그 보기</button>
+
+
+<div id="tag_table" style="display: none">
+
+    <br>1 : 남자
+    <br>2 : 여자
+    <br>3 : 어린이
+    <br>4 : 마신
+    <br>5 : 악마
+    <br>6 : 요정
+    <br>7 : 귀신
+    <br>8 : 정령
+    <br>9 : 흡혈귀
+    <br>10 : 수인
+    <br>11 : 무생물
+    <br>12 : 사념체
+    <br>13 : 신령
+    <br>14 : 도깨비
+    <br>15 : 요괴
+    <br>16 : 용족
+    <br>17 : 촉수
+    <br>18 : 군주
+    <br>19 : 왕자
+    <br>20 : 공주
+    <br>21 : 고등학생
+    <br>22 : 대학생
+    <br>23 : 선생
+    <br>24 : 기사
+    <br>25 : 마녀
+    <br>26 : 사장
+    <br>27 : 학자
+    <br>28 : 만화가
+    <br>29 : 해적
+    <br>30 : 사제
+    <br>31 : 싸우는 아가씨
+    <br>32 : 학생회
+    <br>33 : 닌쟈
+    <br>34 : 아이돌
+    <br>35 : 커피파
+    <br>36 : 홍차파
+    <br>37 : 시간능력자
+    <br>38 : 기자
+    <br>39 : 공돌이
+    <br>40 : 연금술사
+    <br>41 : 주술사
+    <br>42 : 소환사
+    <br>43 : 프리랜서
+    <br>44 : 루키
+    <br>45 : 주역
+    <br>46 : 모리배
+    <br>47 : 총잡이
+    <br>48 : 부먹
+    <br>49 : 찍먹
+    <br>50 : 동물
+    <br>51 : 클래식
+
 </div>
+
+<br>
+
+<script>
+    var skillUrl = "{{ url('skill_index') }}";
+
+    var xmlUrl = "{{url('tool_xml')}}";
+
+</script>

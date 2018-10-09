@@ -10,11 +10,12 @@ namespace Mirage\MainBundle\Document;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Mirage\AdminBundle\Controller\GameConfig;
+use JMS\Serializer\Annotation\Type as JMSType;
 
 
 /**
-* @MongoDB\EmbeddedDocument
-*/
+ * @MongoDB\EmbeddedDocument
+ */
 class Phase
 {
     public function __construct()
@@ -23,11 +24,10 @@ class Phase
         $this->skills = new ArrayCollection();
     }
 
-
     /**
     * @MongoDB\Int
     */
-    protected $phaseId;
+    protected $idPhase;
 
     /**
     * @MongoDB\Int
@@ -38,16 +38,6 @@ class Phase
     * @MongoDB\Int
     */
     protected $grade;
-
-    /**
-    * @MongoDB\String
-    */
-    protected $name_kr;
-
-    /**
-    * @MongoDB\String
-    */
-    protected $name_jp;
 
     /**
      * @MongoDB\Int
@@ -67,42 +57,46 @@ class Phase
     /**
     * @MongoDB\Int
     */
-    protected $spd;
+    protected $agi;
 
     /**
     * @MongoDB\Int
     */
-    protected $luk;
+    protected $con;
+
 
     /**
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\Skill>")
      * @MongoDB\ReferenceMany(targetDocument="Mirage\MainBundle\Document\Skill",  inversedBy="id")
      */
     protected $skills = array();
 
     /**
-    * @MongoDB\Collection
-    */
+     * @MongoDB\Collection(name="tags")
+     */
     protected $tags = array();
 
+
     /**
-     * @MongoDB\Bool
+     * @MongoDB\Boolean
      */
     protected $isEnabled;
+
 
     /**
     * @return mixed
     */
-    public function getPhaseId()
+    public function getIdPhase()
     {
-        return $this->phaseId;
+        return $this->idPhase;
     }
 
     /**
     * @param mixed $phaseId
     */
-    public function setPhaseId($phaseId)
+    public function setIdPhase($idPhase)
     {
-        $this->phaseId = $phaseId;
+        $this->idPhase = $idPhase;
     }
 
     /**
@@ -135,46 +129,6 @@ class Phase
     public function setGrade($grade)
     {
         $this->grade = $grade;
-    }
-
-    /**
-    * @return mixed
-    */
-    public function getNameKr()
-    {
-        return $this->name_kr;
-    }
-
-    /**
-    * @param mixed $name_kr
-    */
-    public function setNameKr($name_kr)
-    {
-        $this->name_kr = $name_kr;
-    }
-
-    /**
-    * @return mixed
-    */
-    public function getNameJp()
-    {
-        return $this->name_jp;
-    }
-
-    /**
-    * @param mixed $name_jp
-    */
-    public function setNameJp($name_jp)
-    {
-        $this->name_jp = $name_jp;
-    }
-
-    public function getName(){
-        $name = array(
-            "KR"=> $this->name_kr,
-            "JP"=> $this->name_jp,
-        );
-        return $name[GameConfig::LANG];
     }
 
     /**
@@ -226,64 +180,54 @@ class Phase
     }
 
     /**
-    * @return mixed
-    */
-    public function getSpd()
+     * @return mixed
+     */
+    public function getAgi()
     {
-        return $this->spd;
+        return $this->agi;
     }
 
     /**
-    * @param mixed $spd
-    */
-    public function setSpd($spd)
+     * @param mixed $agi
+     */
+    public function setAgi($agi)
     {
-        $this->spd = $spd;
+        $this->agi = $agi;
     }
 
     /**
-    * @return mixed
-    */
-    public function getLuk()
+     * @return mixed
+     */
+    public function getCon()
     {
-        return $this->luk;
+        return $this->con;
     }
 
     /**
-    * @param mixed $luk
-    */
-    public function setLuk($luk)
+     * @param mixed $con
+     */
+    public function setCon($con)
     {
-        $this->luk = $luk;
+        $this->con = $con;
     }
 
     /**
-    * @return array
-    */
-    public function getTags()
+     * @return mixed
+     */
+    public function getIsEnabled()
     {
-        return $this->tags;
-    }
-
-    public function addTags($tag){
-        if($this->tags->contains($tag)){
-            $this->tags->add($tag);
-        }
-        return $this;
-    }
-
-    public function removeTags($tag){
-        $this->tags->removeElement($tag);
-        return $this;
+        return $this->isEnabled;
     }
 
     /**
-    * @param array $tags
-    */
-        public function setTags($tags)
-        {
-            $this->tags = $tags;
-        }
+     * @param mixed $isEnabled
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+    }
+
+
 
 
     /**
@@ -315,70 +259,41 @@ class Phase
     }
 
 
-
-    /**
-     * Add skill
-     *
-     * @param Mirage\MainBundle\Document\Skill $skill
-     */
     public function addSkill(\Mirage\MainBundle\Document\Skill $skill)
     {
         $this->skills[] = $skill;
     }
 
-    /**
-     * Remove skill
-     *
-     * @param Mirage\MainBundle\Document\Skill $skill
-     */
     public function removeSkill(\Mirage\MainBundle\Document\Skill $skill)
     {
         $this->skills->removeElement($skill);
     }
 
-    /**
-     * Set isEnabled
-     *
-     * @param Bool $isEnabled
-     * @return self
-     */
-    public function setIsEnabled($isEnabled)
-    {
-        $this->isEnabled = $isEnabled;
-        return $this;
-    }
 
-    /**
-     * Get isEnabled
-     *
-     * @return Bool $isEnabled
-     */
-    public function getIsEnabled()
-    {
-        return $this->isEnabled;
-    }
 
 
     //================================================//
-    public function replaceStatus($hp,$atk,$def,$spd,$luk)
+    public function replaceStatus($hp,$atk,$def,$agi,$con)
     {
         $this->hp = $hp;
         $this->atk = $atk;
         $this->def = $def;
-        $this->spd = $spd;
-        $this->luk = $luk;
+        $this->agi = $agi;
+        $this->con = $con;
+
 
         return $this;
     }
 
-    public function sumEnemyStatus($difficulty,$lv,$hp,$atk,$def,$spd,$luk)
+    public function sumEnemyStatus($difficulty,$lv,$hp,$atk,$def,$agi,$con)
     {
         $this->type;
-        $this->hp += $hp;
         $this->atk += $atk;
         $this->def += $def;
-        $this->spd += $spd;
-        $this->luk += $luk;
+        $this->agi += $agi;
+        $this->con += $con;
+        $this->hp = (((($this->atk*$this->def*0.5)*$lv)*GameConfig::$CORRECTION_VALUE_OF_CLASS[$this->getType()]["hp"])*GameConfig::$CORRECTION_VALUE_OF_DIFFICULTY[(int)$difficulty])+$hp;
+
 
         return $this;
     }
@@ -386,6 +301,7 @@ class Phase
     public function deleteId()
     {
         foreach($this->skills as $skill){
+
             $skill->deleteId();
         }
         return $this;
@@ -399,7 +315,68 @@ class Phase
         $this->spd = $iPhase->getSpd();
         $this->luk = $iPhase->getLuk();
 
+
         return $this;
     }
+
+    public function addTag(\Mirage\MainBundle\Document\Tag $tag)
+    {
+        $this->tags[] = $tag;
+    }
+
+    public function removeTag(\Mirage\MainBundle\Document\Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection $tags
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function modifyPhase($modify)
+    {
+        $this->hp += $modify->getHp();
+        $this->atk += $modify->getAtk();
+        $this->def += $modify->getDef();
+        $this->spd += $modify->getSpd();
+        $this->luk += $modify->getLuk();
+
+        for($i = 0; $i <$this->skills->count();$i++)
+        {
+            if(is_null( $modify->replaceSkill($i)))
+            {
+
+            }else
+            {
+                $this->skills[$i] = $modify->replaceSkill($i);
+            }
+        }
+        return $this;
+    }
+
+    public function getSkillByNum($num, $lv){
+        $result = null;
+        $i = 1;
+        foreach($this->skills as $skill){
+            if($i == $num){
+                foreach($skill->levels as &$level){
+                    if($level->getLv() != $lv){
+                        $this->levels->removeElement($level);
+                    }
+                }
+                $result = $skill;
+                break;
+            }else $i++;
+        }
+
+        return $result;
+    }
+
 
 }

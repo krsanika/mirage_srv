@@ -24,7 +24,7 @@ class GMemcacheController extends Controller
      * @Route("/", name="cache_index")
      * @Template()
      */
-    public function IndexAction(){
+    public function indexAction(){
         global $kernel;
         $memcache = new Memcache;
         $memcache->connect($kernel->getContainer()->getParameter('memcache_host'), $kernel->getContainer()->getParameter('memcache_port'));

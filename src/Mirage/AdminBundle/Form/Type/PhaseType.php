@@ -12,29 +12,39 @@ namespace Mirage\AdminBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Mirage\AdminBundle\Controller\GameConfig;
+use Mirage\AdminBundle\Form\Type\SkillOmitType;
+use Mirage\MainBundle\Game\GameConfig;
 
 class PhaseType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('phaseId', IntegerType::class)
-            ->add('type', ChoiceType::class, array('choices'=> GameConfig::$TYPESTR_KR, 'label'=>'종류'))
-            ->add('grade',ChoiceType::class, array('choices'=> GameConfig::$GRADESTR_KR, 'label'=>'등급'))
-            ->add('name_kr', TextType::class, array('label' => "한국어명"))
-            ->add('name_jp', TextType::class, array('label' => "일본어명"))
-            ->add('atk', IntegerType::class, array('label' => "공", 'error_bubbling'=>true))
-            ->add('def', IntegerType::class, array('label' => "방"))
-            ->add('spd', IntegerType::class, array('label' => "속"))
-            ->add('luk', IntegerType::class, array('label' => "운"))
-            ->add('tags', CollectionType::class, array('entry_type'=> HiddenType::class,  'label'=> "태그", 'allow_add'=>true, 'allow_delete' =>true, 'attr'=> array('class' => 'tagBox')))
-        ;
+        $builder->add('idPhase', IntegerType::class, ['label'=>'페이즈ID'])
+            ->add('type', ChoiceType::class, array('choices'=> array_flip(GameConfig::$TYPESTR_KR), 'label'=>'종류　　'))
+            ->add('grade',ChoiceType::class, array('choices'=> array_flip(GameConfig::$GRADESTR_KR), 'label'=>'등급　　'))
+            ->add('atk', IntegerType::class, array('label' => "공　　　", 'error_bubbling'=>true))
+            ->add('def', IntegerType::class, array('label' => "방　　　"))
+            ->add('agi', IntegerType::class, array('label' => "속　　　"))
+            ->add('con', IntegerType::class, array('label' => "운　　　"))
+            ->add('tags', CollectionType::class, array(
+                'entry_type'=> ChoiceType::class,
+//                'entry_type'=> IntegerType::class,
+                'entry_options'=> [
+                    'choices'=>array_flip(GameConfig::$TAGSTR_KR),
+                'label'=> "태그　　",
+                    'attr'=> ['class' => 'tagBox'],
+//                    'expanded'=>true,
+//                    'multiple'=>true,
+//                    'mapped' => false,
+                ],
+            ))
+            ->add('skills', CollectionType::class, array('entry_type'=> SkillOmitType::class, 'entry_options'=>['label'=>'']))
+            ->add('isEnabled', ChoiceType::class, array('choices'=>["공개"=>true, "비공개"=>false], 'expanded'=>true, "multiple"=>false, 'label'=>'실장　　'));
 //            ->add('save', SubmitType::class, array('label' => '페이즈 등록'));
 
     }

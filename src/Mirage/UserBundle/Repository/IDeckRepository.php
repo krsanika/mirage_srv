@@ -18,18 +18,18 @@ class IDeckRepository extends EntityRepository
 {
 
 
-    public function loadArkByIdIDeck($idIDeck, $idPlayer)
+    public function loadDeckByDeckNumber($deckNumber, $idPlayer)
     {
         $query = $this->createQueryBuilder('q')
-            ->where('q.id = :id')
-            ->andWhere('q.idPlayer = :idPlayer')
+            ->where('q.idPlayer = :idPlayer')
+            ->andWhere('q.deckNumber = :deckNumber')
             ->andWhere('q.isEnabled = 1')
-            ->setParameter('id', $idIDeck)
+            ->setParameter('deckNumber', $deckNumber)
             ->setParameter('idPlayer', $idPlayer)
             ->getQuery();
 
-        $arks = $query->getSingleResult();
+        $deck = $query->getSingleResult();
 
-        return $arks;
+        return $deck;
     }
 }

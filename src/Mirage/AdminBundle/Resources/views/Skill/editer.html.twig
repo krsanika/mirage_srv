@@ -1,0 +1,87 @@
+
+<div id="skill">
+    {{ form_start(form) }}
+    {{ form_row(form.idSkill) }}
+    스킬명 : {{ form.vars.value.idSkill | str('skill','name') }}
+    <input id="skillnameText" type="text" value="{{ form.vars.value.idSkill | str('skill','name') }}">
+    <button onclick="All.sendChangeXml('skill', {{form.vars.value.idSkill}}, 'name')">텍스트 변경</button>
+    {{ form_row(form.consume) }}
+    {{ form_row(form.isMelee) }}
+    {{ form_row(form.idSource) }}
+    <div class="skillEffect">
+    타겟일괄 :
+    <select id ="all_target" onchange="Skill.allChange('target')">
+        <option value="1" selected="selected">아군</option>
+        <option value="2">적군</option>
+        <option value="3">피아식별 안함</option>
+        <option value="4">자신</option>
+    </select>
+    <br>
+    딜레이 일괄
+    <input type="number" id="all_delay" onchange="Skill.allChange('delay')">
+    <br>
+    종류 일괄
+    <select id ="all_type" onchange="Skill.allChange('type')">
+        {%for id, name in types %}
+        <option value="{{ id }}" selected="selected">{{ name }}</option>
+        {% endfor %}
+    </select>
+    <br>
+     컨디션 일괄
+    <select id ="all_idCondition" onchange="Skill.allChange('idCondition')">
+        {%for id, name in conditions %}
+            <option value="{{id}}" selected="selected">{{ name }}</option>
+        {% endfor %}
+    </select>
+    대상자ID 일괄
+    <input type="number" id="all_idSubject" onchange="Skill.allChange('idSubject')">
+    </div>
+
+    {#{{ form_widget(form) }}#}
+        {% for level in form.levels %}
+            <div class="skillLevel" {#data-prototype="{{form_widget(form.levels.vars.prototype)|e('html_attr')#}  }}">
+               {{ form_row(level.lv) }}
+                {% for effect in level.effects %}
+                    <div class="skillEffect" {#data-prototype="{{ form_widget(level.vars.prototype)|e('html_attr') }}"#}>
+                    {{ form_row(effect.target) }}
+                    {% for content in effect.effectContents %}
+                        <div class="skillEffectContent">
+                        {{ form_row(content.chance) }}
+                        {{ form_row(content.type) }}
+                        {{ form_row(content.area) }}
+                        {{ form_row(content.volume) }}
+                        {{ form_row(content.duration) }}
+                        {{ form_row(content.delay) }}
+                        {{ form_row(content.idCondition) }}
+                        {{ form_row(content.idSubject) }}
+                        </div>
+                    {% endfor %}
+                    <button class="addContent">컨텐츠 추가</button>
+                    </div>
+            {% endfor %}
+            {#<div class="ori_tags">#}
+            {#{% for tag in phase.tags %}#}
+                {#{{ form_row(tag.tagType)}}#}
+                {#{{ dump(key) }}#}
+            {#{% endfor %}#}
+            {#</div>#}
+            {#{{ form_row(phase.idSkill | str('SKILL_DESC')) }}#}
+           </div>
+        {% endfor %}
+
+    설명문 : {{ form.vars.value.idSkill | str('skill', 'description') }}<br>
+    <input id="skilldescriptionText" class="textArea" type="textarea" value="{{ form.vars.value.idSkill | str('skill','description') }}">
+    <button onclick="All.sendChangeXml('skill', {{form.vars.value.idSkill}}, 'description')">텍스트 변경</button>
+
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+</div>
+
+{#<button class="button">스킬 비활성화</button>#}
+{#<button class="button">스킬 활성화</button>#}
+
+<button class="button cancle" onclick="Skill.deleteSkill({{form.vars.value.idSkill}})">!스킬 삭제</button>
+
+<script>
+    var xmlUrl = "{{url('tool_xml')}}";
+</script>

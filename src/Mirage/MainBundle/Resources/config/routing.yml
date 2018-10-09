@@ -10,3 +10,7 @@ Sprite:
     type : annotation
     resource : "@MirageMainBundle/Controller/SpriteController.php"
 
+Register:
+    prefix : /register
+    type : annotation
+    resource : "@MirageMainBundle/Controller/RegisterController.php"

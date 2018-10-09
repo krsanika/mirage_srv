@@ -1,0 +1,21 @@
+{# empty Twig template #}
+{% extends 'MirageMainBundle::layout.html.twig' %}
+{# empty Twig template #}
+
+{% block stylesheets %}	
+    {{ parent()}}
+
+{% endblock %}
+
+{% block contents %}
+   <h1>Mirage Cronicle</h1> <br>
+<br>
+    메일을 발송했습니다. 확인해주세요.
+    
+
+<div>
+    <a href="{{ path('login') }}">타이틀로 돌아감</a>
+</div>
+
+ 
+{% endblock %}

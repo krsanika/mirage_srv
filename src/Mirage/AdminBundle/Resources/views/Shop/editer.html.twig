@@ -1,0 +1,40 @@
+
+<div id="shop">
+    {{ form_start(form) }}
+    {{ form_row(form.idShop) }}
+    상점명 : {{ form.vars.value.idShop | str('shop', 'name') }}
+    <input id="shopnameText" type="text" value="{{ form.vars.value.idShop | str('shop','name') }}">
+    <button onclick="All.sendChangeXml('shop', {{form.vars.value.idShop}}, 'name')">텍스트 변경</button>
+
+
+    {{ form_row(form.startDay) }}
+    {{ form_row(form.endDay) }}
+    {% for product in form.products %}
+        <div class="phase">
+        {{ form_label(product.idItem) }}
+        {{ form_widget(product.idItem) }}
+        {{ product.vars.value.idItem | str('item', 'name') }}<br>
+        {{ form_label(product.idEquipment) }}
+        {{ form_widget(product.idEquipment) }}
+        {{ product.vars.value.idEquipment | str('equipment', 'name') }}<br>
+        {{ form_label(product.idArkphase) }}
+        {{ form_widget(product.idArkphase) }}
+        {{ product.vars.value.idArkphase | str('phase', 'name') }}<br>
+        {{ form_row(product.currency) }}
+        {{ form_row(product.cost) }}
+        {{ form_row(product.stack) }}
+        </div>
+    {% endfor %}
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+</div>
+<br>
+<script>
+    var xmlUrl = "{{url('tool_xml')}}";
+
+</script>
+
+
+{#<button class="button">아이템 비활성화</button>#}
+<button class="button cancel">!아이템 삭제</button>
+

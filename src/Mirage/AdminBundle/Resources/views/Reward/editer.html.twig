@@ -1,0 +1,48 @@
+<br>
+<div id="reward">
+    {{ form_start(form) }}
+    {{ form_row(form.idReward) }}
+    보상명 : {{ form.vars.value.idReward | str('reward', 'name') }}
+    <input id="rewardnameText" type="text" value="{{ form.vars.value.idReward | str('reward','name') }}">
+    <button onclick="All.sendChangeXml('reward', {{form.vars.value.idReward}}, 'name')">텍스트 변경</button>
+
+    {{ form_row(form.gold) }}
+    {{ form_row(form.exp) }}
+
+    {% for item in form.items %}
+    <button class="item itemBox">
+        {{ item.vars.value.item.idItem | str('item', 'name')}}
+        {{ form_row(item.item) }}
+        {{ form_label(item.amount)}}{{ form_widget(item.amount)}}개
+    </button>
+    {% endfor %}
+    <br>
+    {% for equipment in form.equipments %}
+    <button class="equipment itemBox">
+        {{ equipment.vars.value.equipment.idEquipment | str('equipment', 'name')}}
+        {{ form_row(equipment.equipment) }}
+        {{ form_label(equipment.amount) }}{{ form_widget(equipment.amount) }}개
+    </button>
+    {% endfor %}
+    <br>
+    {% for ark in form.arks %}
+    <button class="ark itemBox">
+        {{ ark.vars.value.idPhase | str('phase', 'name')}}
+        {{ form_row(ark.ark)}}
+        {{ form_row(ark.idPhase)}}
+        {{ form_label(ark.amount)}}{{ form_widget(ark.amount)}}개
+    </button>
+    {% endfor %}
+    {{ form_row(form.isEnabled) }}
+    설명문 : {{ form.vars.value.idReward | str('reward', 'description') }}<br>
+    <input id="rewarddescriptionText" class="textArea" type="textarea" value="{{ form.vars.value.idReward | str('reward','description') }}">
+    <button onclick="All.sendChangeXml('reward', {{form.vars.value.idReward}}, 'description')">텍스트 변경</button>
+
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+</div>
+<br>
+
+<script>
+    var xmlUrl = "{{url('tool_xml')}}";
+</script>

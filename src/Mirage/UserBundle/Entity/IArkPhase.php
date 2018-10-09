@@ -2,7 +2,11 @@
 
 namespace Mirage\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Mirage\MainBundle\Game\GameConfig;
+use Mirage\UserBundle\Entity\IArk;
+use JMS\Serializer\Annotation\SerializedName;
 
 /**
  * IArkPhase
@@ -12,11 +16,31 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class IArkPhase
 {
-    public function __construct() {
-        $now = time();
-        $this->created = $now;
-        $this->updated = $now;
-        $this->isEnable = false;
+
+
+    public function __construct($phase, $time) {
+        $this->idPhase = $phase->getIdPhase();
+        $this->hp = GameConfig::$BIRTH_HP[$phase->getType()];
+        $this->hpMax = GameConfig::$BIRTH_HP[$phase->getType()];
+        $this->hpMaxOrigin = GameConfig::$BIRTH_HP[$phase->getType()];
+        $this->atk = $phase->getAtk();
+        $this->def = $phase->getDef();
+        $this->agi = $phase->getAgi();
+        $this->con = $phase->getCon();
+        $this->atkOrigin = $phase->getAtk();
+        $this->defOrigin = $phase->getDef();
+        $this->agiOrigin = $phase->getAgi();
+        $this->conOrigin = $phase->getCon();
+        $this->skillOpen = $phase->getGrade();
+        for($i = 1; $i > $this->skillOpen; $i++){
+            if($i > $this->skillOpen) ${'$this->skill'.$i.'Lv'} = 0;
+            else ${'$this->skill'.$i.'Lv'} = 1;
+        }
+        $this->created = $time;
+        $this->updated = $time;
+        $this->dressUp = 1;
+        $this->isEnabled = true;
+        $this->slots = new ArrayCollection();
     }
     /**
      * @var integer
@@ -30,79 +54,218 @@ class IArkPhase
     /**
      * @var integer
      *
-     * @ORM\Column(name="idArkPhase", type="integer", nullable=false)
+     * @ORM\Column(name="idPlayer", type="integer", nullable=false)
      */
-    private $idArkPhase = '0';
+    private $idPlayer = 0;
+
+
+    /**
+     * @var integer
+     * @ORM\Column(name="idPhase", type="integer", nullable=false)
+     * @SerializedName(value="id_phase")
+     */
+    private $idPhase = 0;
+
 
     /**
      * @var tinyint
      *
-     * @ORM\Column(name="dressUp", type="tinyint", nullable=false)
+     * @ORM\Column(name="lv", type="tinyint", nullable=false)
      */
-    private $dressUp = '0';
+    private $lv = '1';
+
+
+
+    /**
+     * @var tinyint
+     *
+     * @ORM\Column(name="lvMax", type="tinyint", nullable=false)
+     */
+    private $lvMax = '20';
+
+    /**
+     * @var tinyint
+     *
+     * @ORM\Column(name="dressUp", type="tinyint", nullable=false, columnDefinition="unsigned")
+     */
+    private $dressUp = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="hp", type="integer", nullable=false)
+     * @ORM\Column(name="exp", type="integer", nullable=false, columnDefinition="unsigned")
      */
-    private $hp = '0';
-
-    /**
-     * @var tinyint
-     *
-     * @ORM\Column(name="atk", type="tinyint", nullable=false)
-     */
-    private $atk = '0';
-
-    /**
-     * @var tinyint
-     *
-     * @ORM\Column(name="def", type="tinyint", nullable=false)
-     */
-    private $def = '0';
-
-    /**
-     * @var tinyint
-     *
-     * @ORM\Column(name="spd", type="tinyint", nullable=false)
-     */
-    private $spd = '0';
-
-    /**
-     * @var tinyint
-     *
-     * @ORM\Column(name="luk", type="tinyint", nullable=false)
-     */
-    private $luk = '0';
+    private $exp = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="accrueCountBattle", type="integer", nullable=false)
+     * @ORM\Column(name="hp", type="integer", nullable=false, columnDefinition="unsigned")
      */
-    private $accrueCountBattle = '0';
+    private $hp = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="atk", type="smallint", nullable=false, columnDefinition="unsigned")
+     */
+    private $atk = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="def", type="smallint", nullable=false, columnDefinition="unsigned")
+     */
+    private $def = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="agi", type="smallint", nullable=false, columnDefinition="unsigned")
+     */
+    private $agi = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="con", type="smallint", nullable=false, columnDefinition="unsigned")
+     */
+    private $con = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="created", type="integer", nullable=false)
+     * @ORM\Column(name="hpMax", type="integer", nullable=false, columnDefinition="unsigned")
      */
-    private $created = '0';
+    private $hpMax = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="updated", type="integer", nullable=false)
+     * @ORM\Column(name="hpMaxOrigin", type="integer", nullable=false, columnDefinition="unsigned")
      */
-    private $updated = '0';
+    private $hpMaxOrigin = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="atkOrigin", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $atkOrigin = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="defOrigin", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $defOrigin = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="agiOrigin", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $agiOrigin = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="conOrigin", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $conOrigin = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="skillOpen", type="tinyint", nullable=false, columnDefinition="unsigned")
+     */
+    private $skillOpen = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="skill1Lv", type="tinyint", nullable=false, columnDefinition="unsigned")
+     */
+    private $skill1Lv = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="skill2Lv", type="tinyint", nullable=false, columnDefinition="unsigned")
+     */
+    private $skill2Lv = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="skill3Lv", type="tinyint", nullable=false, columnDefinition="unsigned")
+     */
+    private $skill3Lv = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="skill4Lv", type="tinyint", nullable=false, columnDefinition="unsigned")
+     */
+    private $skill4Lv = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="skill5Lv", type="tinyint", nullable=false, columnDefinition="unsigned")
+     */
+    private $skill5Lv = 1;
+
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="accrueCountBattle", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $accrueCountBattle = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="stackCount", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $stackCount = 0;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isFavored", type="tinyint", nullable=false)
+     */
+    private $isFavored = 0;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isNew", type="tinyint", nullable=false)
+     */
+    private $isNew = 1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="created", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $created;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="updated", type="integer", nullable=false, columnDefinition="unsigned")
+     */
+    private $updated;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="isEnabled", type="boolean", nullable=false)
      */
-    private $isEnabled = '0';
+    private $isEnabled;
 
     /**
      * @var \IArk
@@ -114,6 +277,9 @@ class IArkPhase
      */
     private $idIArk;
 
+    protected $position;
+
+    private $slots = array();
 
     /**
      * Get id
@@ -126,28 +292,70 @@ class IArkPhase
     }
 
     /**
-     * Set idArkPhase
-     *
-     * @param integer $idArkPhase
-     *
-     * @return IArkPhase
+     * @return int
      */
-    public function setIdArkPhase($idArkPhase)
+    public function getIdPlayer()
     {
-        $this->idArkPhase = $idArkPhase;
-
-        return $this;
+        return $this->idPlayer;
     }
 
     /**
-     * Get idArkPhase
-     *
-     * @return integer
+     * @param int $idPlayer
      */
-    public function getIdArkPhase()
+    public function setIdPlayer($idPlayer)
     {
-        return $this->idArkPhase;
+        $this->idPlayer = $idPlayer;
     }
+
+    /**
+     * @return int
+     */
+    public function getIdPhase()
+    {
+        return $this->idPhase;
+    }
+
+    /**
+     * @param int $idPhase
+     */
+    public function setIdPhase($idPhase)
+    {
+        $this->idPhase = $idPhase;
+    }
+
+
+    /**
+     * @return tinyint
+     */
+    public function getLv()
+    {
+        return $this->lv;
+    }
+
+    /**
+     * @param tinyint $lv
+     */
+    public function setLv($lv)
+    {
+        $this->lv = $lv;
+    }
+
+    /**
+     * @return tinyint
+     */
+    public function getLvMax()
+    {
+        return $this->lvMax;
+    }
+
+    /**
+     * @param tinyint $lvMax
+     */
+    public function setLvMax($lvMax)
+    {
+        $this->lvMax = $lvMax;
+    }
+
 
     /**
      * Set dressUp
@@ -248,52 +456,277 @@ class IArkPhase
     }
 
     /**
-     * Set spd
+     * Set agi
      *
-     * @param tinyint $spd
+     * @param smallint $agi
      *
      * @return IArkPhase
      */
-    public function setSpd($spd)
+    public function setAgi($agi)
     {
-        $this->spd = $spd;
+        $this->agi = $agi;
 
         return $this;
     }
 
     /**
-     * Get spd
+     * Get agi
      *
-     * @return tinyint
+     * @return smallint
      */
-    public function getSpd()
+    public function getAgi()
     {
-        return $this->spd;
+        return $this->agi;
     }
 
     /**
      * Set luk
      *
-     * @param tinyint $luk
+     * @param tinyint $con
      *
      * @return IArkPhase
      */
-    public function setLuk($luk)
+    public function setCon($con)
     {
-        $this->luk = $luk;
+        $this->con = $con;
 
         return $this;
     }
 
     /**
-     * Get luk
-     *
-     * @return tinyint
+     * @return smallint
      */
-    public function getLuk()
+    public function getCon()
     {
-        return $this->luk;
+        return $this->con;
     }
+
+    /**
+     * @return int
+     */
+    public function getAgiOrigin()
+    {
+        return $this->agiOrigin;
+    }
+
+    /**
+     * @param int $agiOrigin
+     */
+    public function setAgiOrigin($agiOrigin)
+    {
+        $this->agiOrigin = $agiOrigin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getConOrigin()
+    {
+        return $this->conOrigin;
+    }
+
+    /**
+     * @param int $conOrigin
+     */
+    public function setConOrigin($conOrigin)
+    {
+        $this->conOrigin = $conOrigin;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getHpMax()
+    {
+        return $this->hpMax;
+    }
+
+    /**
+     * @param int $hpMax
+     */
+    public function setHpMax($hpMax)
+    {
+        $this->hpMax = $hpMax;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHpMaxOrigin()
+    {
+        return $this->hpMaxOrigin;
+    }
+
+    /**
+     * @param int $hpMaxOrigin
+     */
+    public function setHpMaxOrigin($hpMaxOrigin)
+    {
+        $this->hpMaxOrigin = $hpMaxOrigin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAtkOrigin()
+    {
+        return $this->atkOrigin;
+    }
+
+    /**
+     * @param int $atkOrigin
+     */
+    public function setAtkOrigin($atkOrigin)
+    {
+        $this->atkOrigin = $atkOrigin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefOrigin()
+    {
+        return $this->defOrigin;
+    }
+
+    /**
+     * @param int $defOrigin
+     */
+    public function setDefOrigin($defOrigin)
+    {
+        $this->defOrigin = $defOrigin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSkillOpen()
+    {
+        return $this->skillOpen;
+    }
+
+    /**
+     * @param int $skillOpen
+     */
+    public function setSkillOpen($skillOpen)
+    {
+        $this->skillOpen = $skillOpen;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSkill1Lv()
+    {
+        return $this->skill1Lv;
+    }
+
+    /**
+     * @param int $skill1Lv
+     */
+    public function setSkill1Lv($skill1Lv)
+    {
+        $this->skill1Lv = $skill1Lv;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSkill2Lv()
+    {
+        return $this->skill2Lv;
+    }
+
+    /**
+     * @param int $skill2Lv
+     */
+    public function setSkill2Lv($skill2Lv)
+    {
+        $this->skill2Lv = $skill2Lv;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSkill3Lv()
+    {
+        return $this->skill3Lv;
+    }
+
+    /**
+     * @param int $skill3Lv
+     */
+    public function setSkill3Lv($skill3Lv)
+    {
+        $this->skill3Lv = $skill3Lv;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSkill4Lv()
+    {
+        return $this->skill4Lv;
+    }
+
+    /**
+     * @param int $skill4Lv
+     */
+    public function setSkill4Lv($skill4Lv)
+    {
+        $this->skill4Lv = $skill4Lv;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSkill5Lv()
+    {
+        return $this->skill5Lv;
+    }
+
+    /**
+     * @param int $skill5Lv
+     */
+    public function setSkill5Lv($skill5Lv)
+    {
+        $this->skill5Lv = $skill5Lv;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExp()
+    {
+        return $this->exp;
+    }
+
+    /**
+     * @param int $exp
+     */
+    public function setExp($exp)
+    {
+        $this->exp = $exp;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsNew()
+    {
+        return $this->isNew;
+    }
+
+    /**
+     * @param boolean $isNew
+     */
+    public function setIsNew($isNew)
+    {
+        $this->isNew = $isNew;
+    }
+
+
 
     /**
      * Set accrueCountBattle
@@ -318,6 +751,56 @@ class IArkPhase
     {
         return $this->accrueCountBattle;
     }
+
+    /**
+     * @return int
+     */
+    public function getStackCount()
+    {
+        return $this->stackCount;
+    }
+
+    /**
+     * @param int $stackCount
+     */
+    public function setStackCount($stackCount)
+    {
+        $this->stackCount = $stackCount;
+        return $this;
+    }
+
+    public function addStackCount()
+    {
+        $this->stackCount += 1;
+        $this->atk +=1;
+        $this->def +=1;
+        $this->agi +=1;
+        $this->con +=1;
+        $this->atkOrigin +=1;
+        $this->defOrigin +=1;
+        $this->agiOrigin +=1;
+        $this->conOrigin +=1;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsFavored()
+    {
+        return $this->isFavored;
+    }
+
+    /**
+     * @param boolean $isFavored
+     */
+    public function setIsFavored($isFavored)
+    {
+        $this->isFavored = $isFavored;
+    }
+
+
+
 
     /**
      * Set created
@@ -392,13 +875,31 @@ class IArkPhase
     }
 
     /**
+     * @return \IPhaseSlot
+     */
+    public function getSlots()
+    {
+        return $this->slots;
+    }
+
+    /**
+     * @param \IPhaseSlot $slots
+     */
+    public function setSlots($slots)
+    {
+        $this->slots = $slots;
+    }
+
+
+
+    /**
      * Set idIArk
      *
      * @param \Mirage\UserBundle\Entity\IArk $idIArk
      *
      * @return IArkPhase
      */
-    public function setIdIArk(\Mirage\UserBundle\Entity\IArk $idIArk = null)
+    public function setIdIArk(IArk $idIArk = null)
     {
         $this->idIArk = $idIArk;
 
@@ -416,16 +917,46 @@ class IArkPhase
     }
 
 
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
     public function useBattle()
     {
         $a = $this->getUpdated();
-        unset($this->id);
-        unset($this->created);
+   //     unset($this->id);
+//        unset($this->created);
         unset($this->updated);
         unset($this->isEnabled);
         return $this;
     }
+    public function useInfo()
+    {
+        unset($this->updated);
+        unset($this->isEnabled);
+        foreach($this->slots as $slot)
+        {
+            $slot->useInfo();
+        }
+        return $this;
+    }
 
+    public function getSkills()
+    {
+        $result = array();
+        array_push($result, $this->skill1Lv);
+        array_push($result, $this->skill2Lv);
+        array_push($result, $this->skill3Lv);
+        array_push($result, $this->skill4Lv);
+        array_push($result, $this->skill5Lv);
+        return $result;
+    }
     public function deleteIArk()
     {
         unset($this->idIArk);

@@ -1,0 +1,52 @@
+{% extends 'MirageAdminBundle::layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+        <button onClick="mudamuda"> 무다무다!! </button>
+
+
+
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('bundles/goswebsocket/js/gos_web_socket_client.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/goswebsocket/js/vendor/autobahn.min.js') }}"></script>
+    <script>
+
+var wsURL = "ws://{{gos_web_socket_server_host}}:{{ gos_web_socket_server_port}}";
+var webSocket = WS.connect(wsURL);
+
+webSocket.on("socket/connect", function(session){
+    //session is an Autobahn JS WAMP session.
+    console.log("Successfully Connected!");
+
+    //the callback function in "subscribe" is called everytime an event is published in that channel.
+    session.subscribe("croix/test", function(uri, payload){
+        console.log("Received message", payload.msg);
+    });
+
+    session.publish("croix/test", {msg: "MUDAMUDA!"});
+
+//    session.unsubscribe("croix/channel/inde");
+//
+//    session.publish("croix/channel/inde", "I Won't see this");
+
+})
+
+webSocket.on("socket/disconnect", function(error){
+    //error provides us with some insight into the disconnection: error.reason and error.code
+    console.log("Disconnected for " + error.reason + " with code " + error.code);
+})
+
+
+
+function mudamuda(){
+    session.publish("croix/test", {msg: "MUDAMUDA!"});
+}
+
+
+    </script>
+{% endblock %}
+

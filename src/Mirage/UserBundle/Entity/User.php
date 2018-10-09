@@ -3,14 +3,16 @@
 namespace Mirage\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Mirage\UserBundle\Repository\UserRepository;
 /**
  * User
  *
  * @ORM\Table(name="User")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mirage\UserBundle\Repository\UserRepository")
  */
-class User
+class User implements AdvancedUserInterface
 {
     /**
      * @var integer
@@ -24,7 +26,21 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=50, nullable=false)
+     * @ORM\Column(name="idPlayer", type="integer", nullable=false)
+     */
+    private $idPlayer;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=50, nullable=true)
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string",length=65535, nullable=false)
      */
     private $email;
 
@@ -34,6 +50,19 @@ class User
      * @ORM\Column(name="password", type="text", length=65535, nullable=true)
      */
     private $password;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salt", type="string", length=40, nullable=true) */
+    private $salt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="role", type="string", length=40, nullable=false) */
+    private $role;
 
     /**
      * @var integer
@@ -52,11 +81,15 @@ class User
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isEnabled", type="boolean", nullable=false)
+     * @ORM\Column(name="isActive", type="boolean", nullable=false)
      */
-    private $isEnabled = '0';
+    private $isActive;
 
-
+    public function __construct()
+    {
+        $this->isActive = true;
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+    }
 
     /**
      * Get id
@@ -69,28 +102,64 @@ class User
     }
 
     /**
-     * Set email
+     * @return string
+     */
+    public function getIdPlayer()
+    {
+        return $this->idPlayer;
+    }
+
+    /**
+     * @param string $idPlayer
+     */
+    public function setIdPlayer($idPlayer)
+    {
+        $this->idPlayer = $idPlayer;
+    }
+
+
+
+    /**
+     * Set username
      *
-     * @param string $email
+     * @param string $username
      *
      * @return User
      */
-    public function setEmail($email)
+    public function setUsername($username)
     {
-        $this->email = $email;
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get username
      *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
      * @return string
      */
     public function getEmail()
     {
         return $this->email;
     }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+
 
     /**
      * Set password
@@ -117,12 +186,48 @@ class User
     }
 
     /**
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    /**
+     * @param string $salt
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
+
+
+    /**
      * Set created
      *
      * @param integer $created
      *
      * @return User
      */
+
+
     public function setCreated($created)
     {
         $this->created = $created;
@@ -165,26 +270,63 @@ class User
     }
 
     /**
-     * Set isEnabled
+     * Set isActive
      *
-     * @param boolean $isEnabled
+     * @param boolean $isActive
      *
      * @return User
      */
-    public function setIsEnabled($isEnabled)
+    public function setIsActive($isActive)
     {
-        $this->isEnabled = $isEnabled;
+        $this->isActive = $isActive;
 
         return $this;
     }
 
     /**
-     * Get isEnabled
+     * Get isActive
      *
      * @return boolean
      */
-    public function getIsEnabled()
+    public function getIsActive()
     {
-        return $this->isEnabled;
+        return $this->isActive;
     }
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function equals(UserInterface $user)
+    {
+        return $user->getUsername() === $this->username;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
+
+
+
 }

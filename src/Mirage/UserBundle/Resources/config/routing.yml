@@ -19,3 +19,18 @@ Deck:
     type : annotation
     resource : "@MirageUserBundle/Controller/DeckController.php"
 
+Summon:
+    prefix : /summon
+    type : annotation
+    resource : "@MirageUserBundle/Controller/SummonController.php"
+
+Temporis:
+    prefix : /temporis
+    type : annotation
+    resource : "@MirageUserBundle/Controller/TemporisController.php"
+
+Friend:
+    prefix : /friend
+    type : annotation
+    resource : "@MirageUserBundle/Controller/FriendController.php"
+

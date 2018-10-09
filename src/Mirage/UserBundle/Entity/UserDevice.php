@@ -43,13 +43,6 @@ class UserDevice
     private $idDevice;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="idUnique", type="string", length=255, nullable=true)
-     */
-    private $idUnique;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="created", type="integer", nullable=false)
@@ -172,30 +165,6 @@ class UserDevice
     public function getIdDevice()
     {
         return $this->idDevice;
-    }
-
-    /**
-     * Set idUnique
-     *
-     * @param string $idUnique
-     *
-     * @return UserDevice
-     */
-    public function setIdUnique($idUnique)
-    {
-        $this->idUnique = $idUnique;
-
-        return $this;
-    }
-
-    /**
-     * Get idUnique
-     *
-     * @return string
-     */
-    public function getIdUnique()
-    {
-        return $this->idUnique;
     }
 
     /**

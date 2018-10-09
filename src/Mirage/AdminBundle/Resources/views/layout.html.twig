@@ -7,7 +7,7 @@
 {% endblock %}
 {% block body %}
     <table><tr>
-        <td>
+        <td style="width:300px">
         {% include 'MirageAdminBundle::header.html.twig' %}
         </td>
         <td>
@@ -17,6 +17,9 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+
 {% endblock %}
 
 

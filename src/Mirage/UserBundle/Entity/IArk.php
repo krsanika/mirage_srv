@@ -13,12 +13,13 @@ use JMS\Serializer\Annotation\Type as JMSType;
  */
 class IArk
 {
-    public function __construct() {
-        $now = time();
-        $this->lv = 1;
-        $this->created = $now;
-        $this->updated = $now;
-        $this->isEnabled = false;
+    public function __construct($player, $idArk, $time) {
+        $this->idArk = $idArk;
+        $this->idPlayer = $player;
+        $this->limitEquipmentSlot = 2;
+        $this->setCreated($time);
+        $this->setUpdated($time);
+        $this->isEnabled = true;
         $this->iPhases = new ArrayCollection();
     }
 
@@ -37,13 +38,6 @@ class IArk
      * @ORM\Column(name="idArk", type="integer", nullable=false)
      */
     private $idArk = '0';
-
-    /**
-     * @var tinyint
-     *
-     * @ORM\Column(name="lv", type="tinyint", nullable=false)
-     */
-    private $lv = '0';
 
     /**
      * @var integer
@@ -74,13 +68,6 @@ class IArk
     private $limitEquipmentSlot = '0';
 
     /**
-     * @var tinyint
-     *
-     * @ORM\Column(name="isFavorited", type="tinyint", nullable=false)
-     */
-    private $isFavorited = '0';
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="lastBattleTime", type="integer", nullable=false)
@@ -92,21 +79,21 @@ class IArk
      *
      * @ORM\Column(name="created", type="integer", nullable=false)
      */
-    private $created = '0';
+    private $created;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="updated", type="integer", nullable=false)
      */
-    private $updated = '0';
+    private $updated;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="isEnabled", type="boolean", nullable=false)
      */
-    private $isEnabled = '0';
+    private $isEnabled;
 
     /**
      * @var \IArkPhase
@@ -134,6 +121,7 @@ class IArk
      */
     protected $ark;
 
+    protected $position;
 
     /**
      * @var \Mirage\UserBundle\Entity\IArkPhase
@@ -535,6 +523,64 @@ class IArk
         return $this;
     }
 
+    public function getPosition()
+    {
+        return $this->position;
+    }
 
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
 
+    //=========================================//
+    public function addPointRelationship($addPoint)
+    {
+        $this->pointRelationship += $addPoint;
+        return $this;
+    }
+
+    public function addExp($exp){
+        $numLvUp = 0;
+        $curExp = $this->exp;
+        $nextExp = 0;
+        $curLv = $this->lv;
+        $sumExp = $curExp+$exp;
+        $needExp = 0;
+        //((현재레벨 * 16)*5)*0.5+(((현재레벨*4)*5)*0.6) +((현재레벨*현재레벨)*4)
+//        while($i < $curLv)
+//        {
+//            $needExp += floor((($i*16)*5)*0.5+((($i*4)*5)*0.6)+(($i*$i)*4));
+//          //  var_dump($nextExp);
+//        }
+
+        while($curExp < $sumExp){
+            $needExp = $this->needExp($curLv);
+            if($sumExp >= $needExp)
+            {
+                $curExp = $needExp;
+                $numLvUp++;
+                $curLv++;
+                $nextExp = $needExp-$curExp;
+            }
+            else if($sumExp<$needExp)
+            {
+                $curExp = $sumExp;
+                $nextExp = $needExp-$curExp;
+            }
+        }
+        $this->exp = $curExp;
+        $this->lv = $curLv;
+        return array("iArk"=>$this, "numLvUp"=>$numLvUp, "nextExp"=>$nextExp);
+    }
+
+    protected function needExp($curLv)
+    {
+        $needExp =0;
+        for($i = 1; $i <= $curLv ; $i++)
+        {
+            $needExp += floor((($i*16)*5)*0.5+((($i*4)*5)*0.6)+(($i*$i)*4));
+        }
+        return $needExp;
+    }
 }

@@ -1,0 +1,38 @@
+<div id="enemy">
+    {{ form_start(form) }}
+    {{ form_row(form.idEnemy) }}
+    {{ form_row(form.ark) }}
+    {{ form_row(form.idPhase) }}
+    {{ form_row(form.lv) }}
+    {{ form_row(form.dressUp) }}
+    <br>
+    <div class="enemyModify">
+        <b>데이터 변조</b><br>
+        {{ form_row(form.modify.hp) }}
+        {{ form_row(form.modify.atk) }}
+        {{ form_row(form.modify.def) }}
+        {{ form_row(form.modify.agi) }}
+        {{ form_row(form.modify.con) }}
+        {{ form_row(form.modify.skillActivate) }}
+        <br>
+        <b>얼터스킬</b><br>
+        {% for alterSkill in form.modify.alterSkill %}
+            <button>
+            {{ form_row(alterSkill.skillSlotNumber) }}
+            {{ form_row(alterSkill.skill) }}
+            {{ alterSkill.vars.value.skill.idSkill | str('skill', 'name') }}
+            </button>
+        {% endfor %}
+        </div>
+        <br>
+        {% for equipment in form.equipments %}
+            {{ form_row(equipment.idEquipment) }}
+        {% endfor %}
+    </div>
+
+    설명문 : {{ form.vars.value.idEnemy | str('enemy', 'description') }}
+
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+</div>
+<br>

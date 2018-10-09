@@ -1,0 +1,31 @@
+{% extends 'MirageAdminBundle::layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+        <h1>Reward Editer</h1><br><br>
+        <select id="rewardSelector" class="" onchange="All.changeIdSelector()">
+            {% for reward in rewardAll %}
+                <option value="{{ reward.idReward }}">ID. {{reward.idReward}} : {{ reward.idReward | str('reward', 'name') }} </option>
+            {% endfor %}
+        </select>
+        <button class="button accept" onclick="All.load()">리워드 불러오기</button>
+        <button class="button create" onclick="All.create()">리워드 신규제작</button>
+        {#<button class="button">아이템 비활성화</button>#}
+        <button class="button cancel">!리워드 삭제</button>
+        <br>
+
+        <form id="load">
+            <input id='loadId' type="number" name="id" hidden>
+        </form>
+        {% if editReward is not null%}
+            {% include 'MirageAdminBundle:Reward:editer.html.twig' with {"reward" : editReward, "json" : editReward|json_encode|raw, "form" : form} %}
+        {%  endif %}
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('/bundles/admin/js/all.js')}}" type="text/javascript"></script>
+    <script src="{{asset('/bundles/admin/js/reward.js')}}" type="text/javascript"></script>
+
+{% endblock %}

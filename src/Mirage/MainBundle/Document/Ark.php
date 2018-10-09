@@ -9,8 +9,7 @@
 namespace Mirage\MainBundle\Document;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use Mirage\AdminBundle\Controller\GameConfig;
-
+use JMS\Serializer\Annotation\Type as JMSType;
 /**
  * @MongoDB\Document(repositoryClass="Mirage\MainBundle\Repository\ArkRepository")
  */
@@ -30,17 +29,7 @@ class Ark
     /**
      * @MongoDB\Int
      */
-    protected $arkId;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $name_kr;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $name_jp;
+    protected $idArk;
 
     /**
      * @MongoDB\Int
@@ -52,20 +41,17 @@ class Ark
      */
     protected $origin;
 
-    /**
-     * @MongoDB\String
-     */
-    protected $description;
-
-    /**
-     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\Phase")
-     */
-    protected $phases = array();
 
     /**
      * @MongoDB\Bool
      */
     protected $isEnabled;
+
+    /**
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\Phase>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\Phase")
+     */
+    protected $phases = array();
 
     /**
      * @return mixed
@@ -86,74 +72,17 @@ class Ark
     /**
      * @return mixed
      */
-    public function getArkId()
+    public function getIdArk()
     {
-        return $this->arkId;
+        return $this->idArk;
     }
 
     /**
      * @param mixed $arkId
      */
-    public function setArkId($arkId)
+    public function setIdArk($idArk)
     {
-        $this->arkId = $arkId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getNameKr()
-    {
-        return $this->name_kr;
-    }
-
-    /**
-     * @param mixed $name_kr
-     */
-    public function setNameKr($name_kr)
-    {
-        $this->name_kr = $name_kr;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNameJp()
-    {
-        return $this->name_jp;
-    }
-
-    public function getName(){
-        $name = array(
-            "KR"=> $this->name_kr,
-            "JP"=> $this->name_jp,
-        );
-        return $name[GameConfig::LANG];
-
-    }
-    /**
-     * @param mixed $name_jp
-     */
-    public function setNameJp($name_jp)
-    {
-        $this->name_jp = $name_jp;
+        $this->idArk = $idArk;
     }
 
     /**
@@ -172,8 +101,6 @@ class Ark
         $this->title = $title;
     }
 
-
-
     /**
      * @return mixed
      */
@@ -190,45 +117,6 @@ class Ark
         $this->origin = $origin;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPhases()
-    {
-        return $this->phases;
-    }
-
-    public function getPhase($phaseId = null){
-        if(empty($phaseId)){
-            return $this->phases->first();
-        }
-        foreach($this->phases as $phase){
-            if($phase->getPhaseId() == $phaseId ){
-                return $phase;
-            }
-        }
-
-    }
-
-    public function addPhase(Phase $phase){
-        if($this->phases->contains($phase)){
-            $this->phases->add($phase);
-        }
-        return $this;
-    }
-
-    public function removePhase($phase){
-        $this->phases->removeElement($phase);
-        return $this;
-    }
-
-    /**
-     * @param mixed $phases
-     */
-    public function setPhases($phases)
-    {
-        $this->phases = $phases;
-    }
 
     /**
      * Set isEnabled
@@ -252,17 +140,61 @@ class Ark
         return $this->isEnabled;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPhases()
+    {
+        return $this->phases;
+    }
 
+    public function getPhase($phaseId = null){
+        if(empty($phaseId)){
+            return $this->phases->first();
+        }
+        foreach($this->phases as $phase){
+            if($phase->getIdPhase() == $phaseId ){
+                return $phase;
+            }
+        }
 
+    }
 
+    public function addPhase(Phase $phase){
+        if($this->phases->contains($phase)){
+            $this->phases->add($phase);
+        }
+        return $this;
+    }
+
+    public function removePhase($phase){
+        $this->phases->removeElement($phase);
+        return $this;
+    }
+
+//    public function setPhase($idPhase,$replacePhase)
+//    {
+//        foreach($this->phases as $phase){
+//            if($phase->getPhaseId() == $idPhase ){
+//                $phase = $replacePhase;
+//            }
+//        }
+//    }
+
+    /**
+     * @param mixed $phases
+     */
+    public function setPhases($phases)
+    {
+        $this->phases = $phases;
+    }
 
 
     //======Custom Function======================//
     public function outPhase($usePhaseId)
     {
         foreach($this->phases as $phase){
-            if($phase->getPhaseId() != $usePhaseId ){
-                var_dump($phase->getPhaseId() );
+            if($phase->getIdPhase() != $usePhaseId ){
                 unset($phase);
             }
         }
@@ -291,7 +223,7 @@ class Ark
             {
                 foreach($this->phases as $phase)
                 {
-                    if($phase->getPhaseId() == $iPhase->getIdArkPhase())
+                    if($phase->getIdPhase() == $iPhase->getIdArkPhase())
                     {
                         $phase->combineIPhase($iPhase);
                     }
@@ -299,5 +231,16 @@ class Ark
             }
         }
         return $this;
+    }
+
+    public function replacePhase($useIdPhase, $modify)
+    {
+        for($i = 0; $i <$this->phases->count();$i++)
+        {
+            if($this->phases[$i]->getIdPhase() == $useIdPhase)
+            {
+                $this->phases[$i] = $this->phases[$i]->modifyPhase($modify);
+            }
+        }
     }
 }

@@ -1,0 +1,4 @@
+croix_test:
+    channel: croix/test
+    handler:
+        callback: 'croix.topic' #related to the getName() of your topic

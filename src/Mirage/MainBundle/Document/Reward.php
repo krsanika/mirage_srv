@@ -12,6 +12,9 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Collection;
 use JMS\Serializer\Annotation\Type as JMSType;
+use Mirage\MainBundle\Document\RewardArk;
+use Mirage\MainBundle\Document\RewardEquipment;
+use Mirage\MainBundle\Document\RewardItem;
 /**
  * @MongoDB\Document
  */
@@ -28,12 +31,23 @@ class Reward
     /**
      * @MongoDB\Id
      */
-    protected $id;
 
+    protected $id;
+    /**
+     * @MongoDB\Int
+     */
+
+    protected $idReward;
     /**
      * @MongoDB\Int
      */
     protected $gold;
+
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $jewel;
 
     /**
      * @MongoDB\Int
@@ -41,20 +55,20 @@ class Reward
     protected $exp;
 
     /**
-     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\RewardItems>")
-     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\RewardItems")
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\RewardItem>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\RewardItem")
      */
     protected $items = array();
 
     /**
-     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\RewardEquipments>")
-     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\RewardEquipments")
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\RewardEquipment>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\RewardEquipment")
      */
     protected $equipments = array();
 
     /**
-     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\RewardArks>")
-     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\RewardArks")
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\RewardArk>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\RewardArk")
      */
     protected $arks = array();
 
@@ -74,6 +88,23 @@ class Reward
     }
 
     /**
+     * @return mixed
+     */
+    public function getIdReward()
+    {
+        return $this->idReward;
+    }
+
+    /**
+     * @param mixed $idReward
+     */
+    public function setIdReward($idReward)
+    {
+        $this->idReward = $idReward;
+    }
+
+
+    /**
      * Set gold
      *
      * @param int $gold
@@ -82,6 +113,28 @@ class Reward
     public function setGold($gold)
     {
         $this->gold = $gold;
+        return $this;
+    }
+
+    /**
+     * Get jewel
+     *
+     * @return int $jewel
+     */
+    public function getJewel()
+    {
+        return $this->jewel;
+    }
+
+    /**
+     * Set jewel
+     *
+     * @param int $jewel
+     * @return self
+     */
+    public function setJewel($jewel)
+    {
+        $this->jewel = $jewel;
         return $this;
     }
 
@@ -143,9 +196,9 @@ class Reward
     /**
      * Add item
      *
-     * @param Mirage\MainBundle\Document\RewardItems $item
+     * @param RewardItems $item
      */
-    public function addItem(\Mirage\MainBundle\Document\RewardItems $item)
+    public function addItem(RewardItem $item)
     {
         $this->items[] = $item;
     }
@@ -153,9 +206,9 @@ class Reward
     /**
      * Remove item
      *
-     * @param Mirage\MainBundle\Document\RewardItems $item
+     * @param RewardItem $item
      */
-    public function removeItem(\Mirage\MainBundle\Document\RewardItems $item)
+    public function removeItem(RewardItem $item)
     {
         $this->items->removeElement($item);
     }
@@ -171,11 +224,47 @@ class Reward
     }
 
     /**
+     * @param mixed $items
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
+    }
+
+    /**
+     * @param mixed $equipments
+     */
+    public function setEquipments($equipments)
+    {
+        $this->equipments = $equipments;
+    }
+
+    /**
+     * Get arks
+     *
+     * @return \Doctrine\Common\Collections\Collection $arks
+     */
+    public function getArks()
+    {
+        return $this->arks;
+    }
+
+    /**
+     * @param mixed $arks
+     */
+    public function setArks($arks)
+    {
+        $this->arks = $arks;
+    }
+
+    
+
+    /**
      * Add equipment
      *
-     * @param Mirage\MainBundle\Document\RewardEquipments $equipment
+     * @param \Mirage\MainBundle\Document\RewardEquipments $equipment
      */
-    public function addEquipment(\Mirage\MainBundle\Document\RewardEquipments $equipment)
+    public function addEquipment(RewardEquipment $equipment)
     {
         $this->equipments[] = $equipment;
     }
@@ -183,9 +272,9 @@ class Reward
     /**
      * Remove equipment
      *
-     * @param Mirage\MainBundle\Document\RewardEquipments $equipment
+     * @param \Mirage\MainBundle\Document\RewardEquipments $equipment
      */
-    public function removeEquipment(\Mirage\MainBundle\Document\RewardEquipments $equipment)
+    public function removeEquipment(RewardEquipment $equipment)
     {
         $this->equipments->removeElement($equipment);
     }
@@ -203,9 +292,9 @@ class Reward
     /**
      * Add ark
      *
-     * @param Mirage\MainBundle\Document\RewardArks $ark
+     * @param \Mirage\MainBundle\Document\RewardArks $ark
      */
-    public function addArk(\Mirage\MainBundle\Document\RewardArks $ark)
+    public function addArk(RewardArk $ark)
     {
         $this->arks[] = $ark;
     }
@@ -213,20 +302,56 @@ class Reward
     /**
      * Remove ark
      *
-     * @param Mirage\MainBundle\Document\RewardArks $ark
+     * @param \Mirage\MainBundle\Document\RewardArk $ark
      */
-    public function removeArk(\Mirage\MainBundle\Document\RewardArks $ark)
+    public function removeArk(RewardArk $ark)
     {
         $this->arks->removeElement($ark);
     }
 
     /**
-     * Get arks
-     *
-     * @return \Doctrine\Common\Collections\Collection $arks
+     * @param mixed $rewardStr
      */
-    public function getArks()
+    public function getRewardStr()
     {
-        return $this->arks;
+        $rewardStr = "";
+        $rewardStr = "g".$this->gold.",e".$this->exp.",";
+
+        foreach($this->getArks() as $ark)
+        {
+            $arkStr = "a".$ark->getArk()->getIdArk()."p".$ark->getIdPhase().",";
+            $rewardStr .= $arkStr;
+        }
+
+        foreach($this->getEquipments() as $equipment)
+        {
+            $equipStr = "q".$equipment->getEquipment()->getIdEquipment()."x".$equipment->getAmount().",";
+            $rewardStr .= $equipStr;
+        }
+        foreach($this->getItems() as $item){
+            $itemStr = "i".$item->getItem()->getIdItem()."x".$item->getAmount().",";
+            $rewardStr .= $itemStr;
+        }
+//        $this->rewardStr = substr($this->rewardStr, 0, -1);
+        return $rewardStr;
+    }
+
+    public function deleteId()
+    {
+        unset($this->id);
+        foreach($this->items as $item)
+        {
+            $item->deleteId();
+        }
+        foreach($this->equipments as $equipment)
+        {
+            $equipment->deleteId();
+        }
+        foreach($this->arks as $ark)
+        {
+            $ark->deleteId();
+        }
+
+        return $this;
     }
 }

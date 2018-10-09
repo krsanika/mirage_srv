@@ -22,17 +22,17 @@ class NoticeController extends Controller
      * @Template()
      */
     public function indexAction(){
-        $notice = new Notification();
-        $notice->setSubject('A Foo Bar');
-        $notice->setText('19.99');
+//        $notice = new Notification();
+//        $notice->setSubject('A Foo Bar');
+//        $notice->setText('19.99');
+//
+//        $dm = $this->get('doctrine_mongodb')->getManager();
+//        $dm->persist($notice);
+//        $dm->flush();
 
-        $dm = $this->get('doctrine_mongodb')->getManager();
-        $dm->persist($notice);
-        $dm->flush();
 
 
-
-        return new Response('Created product id '.$notice->getId());
+        return array();
     }
 
 

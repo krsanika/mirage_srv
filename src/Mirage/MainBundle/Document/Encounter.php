@@ -8,10 +8,13 @@
 
 namespace Mirage\MainBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Metadata\Tests\Driver\Fixture\A\A;
 use Mirage\MainBundle\Document\StageInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Collection;
 use JMS\Serializer\Annotation\Type as JMSType;
+use Mirage\MainBundle\Document\Tile;
+use Mirage\MainBundle\Document\EncounterTrigger;
 /**
  * @MongoDB\Document
  */
@@ -19,7 +22,8 @@ class Encounter
 {
     public function __construct()
     {
-        $this->enemyPositions = new ArrayCollection();
+        $this->tiles = new ArrayCollection();
+        $this->triggers = new ArrayCollection();
     }
 
     /**
@@ -30,30 +34,64 @@ class Encounter
     /**
      * @MongoDB\Int
      */
-    protected $encId;
+    protected $idEnc;
 
     /**
-     * @JMSType("Mirage\MainBundle\Document\StageInfo")
-     * @MongoDB\EmbedOne(targetDocument="Mirage\MainBundle\Document\StageInfo")
+     * @MongoDB\Int
      */
-    protected $stageInfo;
+    protected $idBgNear;
 
     /**
-     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\EnemyPosition>")
-     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\EnemyPosition")
+     * @MongoDB\Int
      */
-    protected $enemyPositions = array();
+    protected $idBgMid;
 
     /**
-     * @MongoDB\Field(name="eventTrigger", type="hash")
+     * @MongoDB\Int
      */
-    protected $eventTrigger = array();
+    protected $idBgFar;
 
     /**
-     * @JMSType("Mirage\MainBundle\Document\Reward")
-     * @MongoDB\ReferenceOne(targetDocument="Mirage\MainBundle\Document\Reward")
+     * @MongoDB\Int
      */
-    protected $reward;
+    protected $speedBgNear;
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $speedBgMid;
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $speedBgFar;
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $idBgm;
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $idTile;
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $mapLength;
+
+    /**
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\Tile>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\Tile")
+     */
+    protected $tiles = array();
+
+    /**
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\EncounterTrigger>")
+     * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\EncounterTrigger")
+     */
+    protected $triggers = array();
 
     /**
      * @MongoDB\Int
@@ -72,6 +110,8 @@ class Encounter
 
 
     protected $enemyCount;
+
+    protected $rewardStr;
 
     /**
      * @return mixed
@@ -95,138 +135,157 @@ class Encounter
     /**
      * @return Int
      */
-    public function getEncId()
+    public function getIdEnc()
     {
-        return $this->encId;
+        return $this->idEnc;
     }
 
     /**
-     * @param Int $encId
+     * @param Int $idEnc
      * @return $this
      */
-    public function setEncId($encId)
+    public function setIdEnc($idEnc)
     {
-        $this->encId = $encId;
+        $this->idEnc = $idEnc;
         return $this;
     }
 
 
+
     /**
-     * @param array $stageInfo
-     * @return $this
+     * @return mixed
      */
-    public function setStageInfo()
+    public function getIdBgm()
     {
-        $this->stageInfo;
-        return $this;
+        return $this->idBgm;
     }
 
     /**
-     * @return array
+     * @param mixed $idBgm
      */
-    public function getStageInfo()
+    public function setIdBgm($idBgm)
     {
-        return $this->stageInfo;
+        $this->idBgm = $idBgm;
     }
 
     /**
-     * Add stageInfo
+     * @return mixed
+     */
+    public function getMapLength()
+    {
+        return $this->mapLength;
+    }
+
+    /**
+     * @param mixed $mapLength
+     */
+    public function setMapLength($mapLength)
+    {
+        $this->mapLength = $mapLength;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getIdTile()
+    {
+        return $this->idTile;
+    }
+
+    /**
+     * @param mixed $idTile
+     */
+    public function setIdTile($idTile)
+    {
+        $this->idTile = $idTile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTiles()
+    {
+        return $this->tiles;
+    }
+
+    /**
+     * @param mixed $tiles
+     */
+    public function setTiles($tiles)
+    {
+        $this->tiles = $tiles;
+    }
+
+    /**
+     * Add Tile
      *
-     * @param StageInfo $stageInfo
-     * @return self
+     * @param \Mirage\MainBundle\Document\Tile $tile
      */
-    public function addStageInfo(StageInfo $stageInfo)
+    public function addTile(\Mirage\MainBundle\Document\Tile $tile)
     {
-        $this->stageInfo[] = $stageInfo;
-    }
-
-
-    /**
-     * Remove stageInfo
-     *
-     * @param StageInfo $stageInfo
-     * @return self
-     */
-    public function removeStageInfo(StageInfo $stageInfo)
-    {
-        $this->stageInfo->removeElement($stageInfo);
-    }
-
-
-
-    /**
-     * Add enemyPosition
-     *
-     * @param Mirage\MainBundle\Document\EnemyPosition $enemyPosition
-     */
-    public function addEnemyPosition(\Mirage\MainBundle\Document\EnemyPosition $enemyPosition)
-    {
-        $this->enemyPositions[] = $enemyPosition;
+        $this->tiles->add($tile);
     }
 
     /**
-     * Remove enemyPosition
+     * Remove Tile
      *
-     * @param Mirage\MainBundle\Document\EnemyPosition $enemyPosition
+     * @param \Mirage\MainBundle\Document\Tile $tile
      */
-    public function removeEnemyPosition(\Mirage\MainBundle\Document\EnemyPosition $enemyPosition)
+    public function removeTile(\Mirage\MainBundle\Document\Tile $tile)
     {
-        $this->enemyPositions->removeElement($enemyPosition);
+        $this->tiles->removeElement($tile);
     }
 
-    /**
-     * Get enemyPositions
-     *
-     * @return \Doctrine\Common\Collections\Collection $enemyPositions
-     */
-    public function getEnemyPositions()
-    {
-        return $this->enemyPositions;
-    }
 
-    public function getEnemy($tilePositions = null){
-        if(empty($tilePositions)){
-            return $this->enemyPositions->first();
+    public function getEnemy($location = null){
+        if(empty($location)){
+            return $this->tiles->first();
         }
-        foreach($this->enemyPositions as $enemyPostion){
-            if($enemyPostion->getPosition() == $tilePositions ){
-                return $enemyPostion->getEnemy();
-            }
-        }
+//        foreach($this->Tiles as $tile){
+//            if($enemyPostion->getPosition() == $tile ){
+//                return $enemyPostion->getEnemy();
+//            }
+//        }
     }
 
     public function addEnemy(Enemy $enemy){
-        if($this->enemyPositions->contains($enemy)){
-            $this->enemyPositions->add($enemy);
+        if($this->tiles->contains($enemy)){
+            $this->tiles->add($enemy);
         }
         return $this;
     }
 
     public function removeEnemy($enemy){
-        $this->enemyPositions->removeElement($enemy);
+        $this->tiles->removeElement($enemy);
         return $this;
     }
 
     /**
-     * Set eventTrigger
-     *
-     * @param hash $eventTrigger
-     * @return self
+     * @return mixed
      */
-    public function setEventTrigger($eventTrigger)
+    public function getTriggers()
     {
-        $this->eventTrigger = $eventTrigger;
-        return $this;
+        return $this->triggers;
     }
 
     /**
-     * Get eventTrigger
-     *
-     * @return hash $eventTrigger
+     * @param mixed $triggers
      */
-    public function getEventTrigger()
+    public function setTriggers($triggers)
     {
-        return $this->eventTrigger;
+        $this->triggers = $triggers;
+    }
+
+    public function addTriggers(EncounterTrigger $trigger)
+    {
+        return $this->triggers->add($trigger);
+    }
+
+    public function removeTriggers(EncounterTrigger $trigger)
+    {
+        $this->triggers->removeElement($trigger);
+        return $this;
     }
 
 
@@ -299,19 +358,116 @@ class Encounter
     /**
      * Set reward
      *
-     * @param Mirage\MainBundle\Document\Reward $reward
+     * @param \Mirage\MainBundle\Document\Reward $reward
      * @return self
      */
-    public function setReward(\Mirage\MainBundle\Document\Reward $reward)
+    public function setReward(Reward $reward)
     {
         $this->reward = $reward;
         return $this;
     }
 
     /**
+     * @return mixed
+     */
+    public function getIdBgNear()
+    {
+        return $this->idBgNear;
+    }
+
+    /**
+     * @param mixed $idBgNear
+     */
+    public function setIdBgNear($idBgNear)
+    {
+        $this->idBgNear = $idBgNear;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdBgMid()
+    {
+        return $this->idBgMid;
+    }
+
+    /**
+     * @param mixed $idBgMid
+     */
+    public function setIdBgMid($idBgMid)
+    {
+        $this->idBgMid = $idBgMid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdBgFar()
+    {
+        return $this->idBgFar;
+    }
+
+    /**
+     * @param mixed $idBgFar
+     */
+    public function setIdBgFar($idBgFar)
+    {
+        $this->idBgFar = $idBgFar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSpeedBgNear()
+    {
+        return $this->speedBgNear;
+    }
+
+    /**
+     * @param mixed $speedBgNear
+     */
+    public function setSpeedBgNear($speedBgNear)
+    {
+        $this->speedBgNear = $speedBgNear;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSpeedBgMid()
+    {
+        return $this->speedBgMid;
+    }
+
+    /**
+     * @param mixed $speedBgMid
+     */
+    public function setSpeedBgMid($speedBgMid)
+    {
+        $this->speedBgMid = $speedBgMid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSpeedBgFar()
+    {
+        return $this->speedBgFar;
+    }
+
+    /**
+     * @param mixed $SpeedBgFar
+     */
+    public function setSpeedBgFar($speedBgFar)
+    {
+        $this->speedBgFar = $speedBgFar;
+    }
+
+
+    /**
      * Get reward
      *
-     * @return Mirage\MainBundle\Document\Reward $reward
+     * @return \Mirage\MainBundle\Document\Reward $reward
      */
     public function getReward()
     {
@@ -321,9 +477,10 @@ class Encounter
     public function deleteId()
     {
         unset($this->id);
-        foreach($this->enemyPositions as $enemyInfo){
-            $enemyInfo->deleteId();
+        foreach($this->tiles as $tile){
+            $tile->deleteId();
         }
+       // $this->reward->deleteId();
         return $this;
     }
 
@@ -332,7 +489,29 @@ class Encounter
      */
     public function getEnemyCount()
     {
-        return $this->enemyCount;
+        $count = 0;
+        foreach($this->tiles as $tile){
+            if(!empty($tile->getEnemy()))
+            {
+                $count += 1;
+            }
+        }
+
+        return $count;
+    }
+
+    public function getEnemyIds(){
+        $ids = [];
+        foreach($this->tiles as $tile){
+            if(!empty($tile->getEnemy()))
+            {
+                if(array_key_exists('enemyId'.$tile->getEnemy()->getIdEnemy() ,$ids)){
+                    $ids['enemyId'.$tile->getEnemy()->getIdEnemy()] ++;
+                }else $ids['enemyId'.$tile->getEnemy()->getIdEnemy()] = 1;
+            }
+        }
+
+        return $ids;
     }
 
     /**
@@ -345,14 +524,46 @@ class Encounter
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRewardStr()
+    {
+        return $this->rewardStr;
+    }
 
-    public function remakeForStoryView(){
-        unset($this->eventTrigger);
+
+
+
+    public function unsetForStoryView(){
+        unset($this->id);
+        unset($this->idEnc);
         unset($this->startDay);
         unset($this->endDay);
         unset($this->isEnabled);
+        unset($this->tiles);
+        unset($this->triggers);
+      //  $this->reward->remakeForStoryView();
+        return $this;
+    }
+
+    public function fieldsForBattle(){
+//        $this->setRewardStr($this->reward);
+        unset($this->reward);
         unset($this->id);
-        unset($this->enemyPositions);
+        unset($this->startDay);
+        unset($this->endDay);
+        unset($this->isEnabled);
+
+        foreach($this->tiles as &$tile){
+            $tile->unsetEnemy();
+            if(empty($tile->getTerrain())){
+                $tile->unsetLocation();
+                $this->tiles->removeElement($tile);
+            }
+        }
+//        $this->tiles->clear();
+
         return $this;
     }
 

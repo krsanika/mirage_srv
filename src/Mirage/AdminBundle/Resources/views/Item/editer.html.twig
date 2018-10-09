@@ -1,0 +1,37 @@
+
+<div id="item">
+    {{ form_start(form) }}
+    {{ form_row(form.idItem) }}
+    아이템명 : {{ form.vars.value.idItem | str('item', 'name') }}
+    <input id="itemnameText" type="text" value="{{ form.vars.value.idItem | str('item','name') }}">
+    <button onclick="All.sendChangeXml('item', {{form.vars.value.idItem}}, 'name')">텍스트 변경</button>
+
+    {{ form_row(form.effect) }}
+    {{ form_row(form.effectSize) }}
+    {{ form_row(form.type) }}
+    {{ form_row(form.tier) }}
+    {{ form_row(form.material) }}
+
+    <div class="combine combineBox">
+        {% for combine in form.combine %}
+            {{ form_row(combine.idItem) }}
+            {{ form_row(combine.count) }}
+        {% endfor %}
+    </div>
+    {{ form_widget(form) }}
+    설명문 : {{ form.vars.value.idItem | str('item', 'description') }}
+    <input id="itemdescriptionText" class="textArea" type="textarea" value="{{ form.vars.value.idItem | str('item','description') }}">
+    <button onclick="All.sendChangeXml('item', {{form.vars.value.idItem}}, 'description')">텍스트 변경</button>
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+</div>
+<br>
+<script>
+    var xmlUrl = "{{url('tool_xml')}}";
+
+</script>
+
+
+{#<button class="button">아이템 비활성화</button>#}
+<button class="button cancel">!아이템 삭제</button>
+

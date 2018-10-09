@@ -1,0 +1,42 @@
+    <h1>미라쥬크로니클 CBT 가입</h1>
+
+    {{form_start(form)}}
+
+        {{ form_label(form.username)}}{{form_widget(form.username)}}<br>
+        {{form_label(form.password.first)}}{{ form_widget(form.password.first)}}<br>
+        {{form_label(form.password.second)}}{{ form_widget(form.password.second) }}
+    <div>
+        {{form_errors(form.password.first)}}<br>
+        {{form_errors(form.password.second)}}<br>
+        {{form_errors(form) }}
+        {{form_rest(form) }}
+    </div>
+    {{form_end(form)}}
+
+    <script>
+
+var id_device = 'id_device';
+var device_name = 'device_name';
+var os_type = 'os_type';
+var match = location.search.match(/id_device=(.*?)(&|$)/);
+if(match) {
+    id_device = decodeURIComponent(match[1]);
+}
+match = location.search.match(/device_name=(.*?)(&|$)/);
+if(match) {
+    device_name = decodeURIComponent(match[1]);
+}
+match = location.search.match(/os_type=(.*?)(&|$)/);
+if(match) {
+    os_type = decodeURIComponent(match[1]);
+}
+
+document.getElementsByName('user[id_device]')[0].value= id_device;
+document.getElementsByName('user[device_name]')[0].value= device_name;
+document.getElementsByName('user[os_type]')[0].value= os_type;
+
+    </script>
+    {#<div>#}
+        {#<a href="{{ path('login') }}">로그인 화면으로 돌아가기</a>#}
+    {#</div>#}
+

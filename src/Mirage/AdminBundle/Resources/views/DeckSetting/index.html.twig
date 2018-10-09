@@ -1,0 +1,47 @@
+{% extends 'MirageAdminBundle::layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+        <h1>Deck Test</h1><br><br>
+            <input id="saveTest" type="button" value="덱저장테스트" onClick="savedeckTest()">
+        <br>
+
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+    <script>
+
+var testData = {
+    id_player : 1,
+    deckNumber : 1,
+    positions : {
+        0 : null,
+        1 : null,
+        2 : null,
+        3 : null,
+        4 : null,
+        5 : null,
+        6 : 1,
+        7 : null,
+        8 : 2
+    }
+};
+
+function savedeckTest(){
+    $.ajax({
+        url : "{{url('save_deck')}}",
+        data : testData,
+        type : 'POST',
+        success : function(data){
+            alert('됨');
+            console.log(data);
+        }
+    });
+
+
+}
+
+    </script>
+{% endblock %}

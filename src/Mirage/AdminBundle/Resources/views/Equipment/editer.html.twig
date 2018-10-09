@@ -1,0 +1,28 @@
+
+<div id="equipment">
+    {{ form_start(form) }}
+    {{ form_row(form.idEquipment) }}
+    장비명　 {{ form.vars.value.idEquipment | str('equipment', 'name') }}
+    <input id="equipmentnameText" type="text" value="{{ form.vars.value.idEquipment | str('equipment','name') }}">
+    <button onclick="All.sendChangeXml('equipment', {{form.vars.value.idEquipment}}, 'name')">텍스트 변경</button>
+
+    {{ form_row(form.effect) }}
+    {{ form_row(form.volume) }}
+    {{ form_row(form.tier) }}
+    {#{{ form_widget(form) }}#}
+    설명문　{{ form.vars.value.idEquipment | str('equipment', 'description') }}
+    <input id="equipmentdescriptionText" class="textArea" type="textarea" value="{{ form.vars.value.idEquipment | str('equipment','description') }}">
+    <button onclick="All.sendChangeXml('equipment', {{form.vars.value.idEquipment}}, 'description')">텍스트 변경</button>
+    {{ form_row(form.save) }}
+    {{ form_end(form) }}
+</div>
+<br>
+{#<button class="button">스킬 비활성화</button>#}
+<button class="button cancel">!장비 삭제</button>
+
+<script>
+    var xmlUrl = "{{url('tool_xml')}}";
+
+</script>
+
+

@@ -8,10 +8,17 @@ use Doctrine\ORM\Mapping as ORM;
  * IItem
  *
  * @ORM\Table(name="IItem", indexes={@ORM\Index(name="FK_IItem_Player", columns={"idPlayer"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mirage\UserBundle\Repository\IItemRepository")
  */
 class IItem
 {
+    public function __construct($player, $idItem , $time) {
+        $this->idItem = $idItem;
+        $this->idPlayer = $player;
+        $this->setCreated($time);
+        $this->setUpdated($time);
+        $this->isEnabled = true;
+    }
     /**
      * @var integer
      *
@@ -220,5 +227,18 @@ class IItem
     public function getIdPlayer()
     {
         return $this->idPlayer;
+    }
+
+
+    //==================================//
+    public function addQuantity($addQuantity)
+    {
+        $this->quantity += $addQuantity;
+        if($this->quantity > 99) $this->quantity = 99;
+        return $this;
+    }
+
+    public function unsetPlayer(){
+        unset($this->idPlayer);
     }
 }

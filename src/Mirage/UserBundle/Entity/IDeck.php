@@ -2,8 +2,8 @@
 
 namespace Mirage\UserBundle\Entity;
 
-use \Mirage\UserBundle\Entity\IArk;
-use \Mirage\UserBundle\Entity\Player;
+use Mirage\UserBundle\Entity\IArkPhase;
+use Mirage\UserBundle\Entity\Player;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,7 +20,6 @@ class IDeck
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -29,7 +28,7 @@ class IDeck
      *
      * @ORM\Column(name="deckNumber", type="tinyint", nullable=true)
      */
-    private $deckNumber;
+    private $deckNumber =1;
 
     /**
      * @var integer
@@ -53,91 +52,91 @@ class IDeck
     private $isEnabled = '0';
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="a0", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="a0", referencedColumnName="id", nullable=true)
      * })
      */
     private $a0;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="a1", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="a1", referencedColumnName="id", nullable=true)
      * })
      */
     private $a1;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="a2", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="a2", referencedColumnName="id", nullable=true)
      * })
      */
     private $a2;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="b0", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="b0", referencedColumnName="id", nullable=true)
      * })
      */
     private $b0;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="b1", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="b1", referencedColumnName="id", nullable=true)
      * })
      */
     private $b1;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="b2", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="b2", referencedColumnName="id", nullable=true)
      * })
      */
     private $b2;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="c0", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="c0", referencedColumnName="id", nullable=true)
      * })
      */
     private $c0;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="c1", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="c1", referencedColumnName="id", nullable=true)
      * })
      */
     private $c1;
 
     /**
-     * @var \IArk
+     * @var IArkPhase
      *
-     * @ORM\ManyToOne(targetEntity="IArk")
+     * @ORM\ManyToOne(targetEntity="IArkPhase")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="c2", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="c2", referencedColumnName="id", nullable=true)
      * })
      */
     private $c2;
@@ -147,12 +146,13 @@ class IDeck
      *
      * @ORM\ManyToOne(targetEntity="Player")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idPlayer", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idPlayer", referencedColumnName="id", nullable=true)
      * })
      */
     private $idPlayer;
 
 
+    protected $arkPositions;
 
     /**
      * Get id
@@ -163,6 +163,16 @@ class IDeck
     {
         return $this->id;
     }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+
 
     /**
      * Set deckNumber
@@ -263,11 +273,11 @@ class IDeck
     /**
      * Set a0
      *
-     * @param IArk$a0
+     * @param IArkPhase $a0
      *
      * @return IDeck
      */
-    public function setA0(IArk $a0 = null)
+    public function setA0(IArkPhase $a0)
     {
         $this->a0 = $a0;
 
@@ -277,7 +287,7 @@ class IDeck
     /**
      * Get a0
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getA0()
     {
@@ -287,11 +297,11 @@ class IDeck
     /**
      * Set a1
      *
-     * @param IArk$a1
+     * @param IArkPhase $a1
      *
      * @return IDeck
      */
-    public function setA1(IArk $a1 = null)
+    public function setA1(IArkPhase $a1)
     {
         $this->a1 = $a1;
 
@@ -301,7 +311,7 @@ class IDeck
     /**
      * Get a1
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getA1()
     {
@@ -311,11 +321,11 @@ class IDeck
     /**
      * Set a2
      *
-     * @param IArk$a2
+     * @param IArkPhase $a2
      *
      * @return IDeck
      */
-    public function setA2(IArk $a2 = null)
+    public function setA2(IArkPhase $a2)
     {
         $this->a2 = $a2;
 
@@ -325,7 +335,7 @@ class IDeck
     /**
      * Get a2
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getA2()
     {
@@ -335,11 +345,11 @@ class IDeck
     /**
      * Set b0
      *
-     * @param IArk$b0
+     * @param IArkPhase $b0
      *
      * @return IDeck
      */
-    public function setB0(IArk $b0 = null)
+    public function setB0(IArkPhase $b0)
     {
         $this->b0 = $b0;
 
@@ -349,7 +359,7 @@ class IDeck
     /**
      * Get b0
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getB0()
     {
@@ -359,11 +369,11 @@ class IDeck
     /**
      * Set b1
      *
-     * @param IArk$b1
+     * @param IArkPhase $b1
      *
      * @return IDeck
      */
-    public function setB1(IArk $b1 = null)
+    public function setB1(IArkPhase $b1)
     {
         $this->b1 = $b1;
 
@@ -373,7 +383,7 @@ class IDeck
     /**
      * Get b1
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getB1()
     {
@@ -383,11 +393,11 @@ class IDeck
     /**
      * Set b2
      *
-     * @param IArk$b2
+     * @param IArkPhase $b2
      *
      * @return IDeck
      */
-    public function setB2(IArk $b2 = null)
+    public function setB2(IArkPhase $b2 = null)
     {
         $this->b2 = $b2;
 
@@ -397,7 +407,7 @@ class IDeck
     /**
      * Get b2
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getB2()
     {
@@ -407,11 +417,11 @@ class IDeck
     /**
      * Set c0
      *
-     * @param IArk$c0
+     * @param IArkPhase $c0
      *
      * @return IDeck
      */
-    public function setC0(IArk $c0 = null)
+    public function setC0(IArkPhase $c0 = null)
     {
         $this->c0 = $c0;
 
@@ -421,7 +431,7 @@ class IDeck
     /**
      * Get c0
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getC0()
     {
@@ -431,11 +441,11 @@ class IDeck
     /**
      * Set c1
      *
-     * @param IArk$c1
+     * @param IArkPhase $c1
      *
      * @return IDeck
      */
-    public function setC1(IArk $c1 = null)
+    public function setC1(IArkPhase $c1 = null)
     {
         $this->c1 = $c1;
 
@@ -445,7 +455,7 @@ class IDeck
     /**
      * Get c1
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getC1()
     {
@@ -455,11 +465,11 @@ class IDeck
     /**
      * Set c2
      *
-     * @param IArk$c2
+     * @param IArkPhase $c2
      *
      * @return IDeck
      */
-    public function setC2(IArk $c2 = null)
+    public function setC2(IArkPhase $c2 = null)
     {
         $this->c2 = $c2;
 
@@ -469,7 +479,7 @@ class IDeck
     /**
      * Get c2
      *
-     * @return \Mirage\UserBundle\Entity\IArk
+     * @return \Mirage\UserBundle\Entity\IArkPhase
      */
     public function getC2()
     {
@@ -483,7 +493,7 @@ class IDeck
      *
      * @return IDeck
      */
-    public function setIdPlayer(\Mirage\UserBundle\Entity\Player $idPlayer = null)
+    public function setIdPlayer(Player $idPlayer = null)
     {
         $this->idPlayer = $idPlayer;
 
@@ -500,7 +510,40 @@ class IDeck
         return $this->idPlayer;
     }
 
-    public function getArkPos(){
+//    public function getArkPosToArray(){
+//        $arks = array();
+//        foreach($this->getArkPosition() as $position => $ark)
+//        {
+//            if(isset($ark)){
+//                $arks[] = $ark->setPosition($position);
+//            }
+//        }
+//        var_dump($arks);
+//        return $arks;
+//    }
+
+    public function getArkPositionsToArray(){
+        $arkposition = $this->getArkPosition();
+        foreach($arkposition as $position => $ark)
+        {
+            if(isset($ark)){
+                $arks[] = $ark->setPosition($position);
+            }
+        }
+        $result = array();
+        foreach($arkposition as $position){
+
+            if(isset($position)) {
+                $position->useBattle();
+                $result[] = $position->deleteIArk();
+            }
+            else $result[] = 0;
+        }
+
+        return $result;
+    }
+
+    public function getArkPosition(){
         return array(
             "a0"=>$this->getA0(),
             "a1"=>$this->getA1(),
@@ -514,12 +557,55 @@ class IDeck
         );
     }
 
+    public function setPositionAsKey($pos, $ark){
+        if($pos == 0) $this->a0 = $ark;
+        if($pos == 1) $this->a1 = $ark;
+        if($pos == 2) $this->a2 = $ark;
+        if($pos == 3) $this->b0 = $ark;
+        if($pos == 4) $this->b1 = $ark;
+        if($pos == 5) $this->b2 = $ark;
+        if($pos == 6) $this->c0 = $ark;
+        if($pos == 7) $this->c1 = $ark;
+        if($pos == 8) $this->c2 = $ark;
+        return $this;
+    }
+
+    public function unsetAllPosition(){
+        $this->a0 = null;
+        $this->a1 = null;
+        $this->a2 = null;
+        $this->b0 = null;
+        $this->b1 = null;
+        $this->b2 = null;
+        $this->c0 = null;
+        $this->c1 = null;
+        $this->c2 = null;
+    }
+
+    public function getArkPositions()
+    {
+        return $this->arkPositions;
+    }
+
+    public function setArkPositions($arkPositions)
+    {
+        $this->arkPositions = $arkPositions;
+
+    }
+
     public function unsetPlayer()
     {
         unset($this->idPlayer);
         return $this;
     }
 
+    public function unsetDBInfo()
+    {
+        unset($this->created);
+        unset($this->updated);
+        unset($this->isEnabled);
+        return $this;
+    }
     public function useBattle()
     {
         unset($this->id);
@@ -534,7 +620,7 @@ class IDeck
 
     public function useBattleDeckArk()
     {
-        foreach($this->getArkPos() as $ark){
+        foreach($this->getArkPosition() as $ark){
             if(isset($ark)){
                 $ark->useBattle();
             }

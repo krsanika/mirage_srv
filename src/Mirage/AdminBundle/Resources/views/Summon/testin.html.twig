@@ -1,0 +1,33 @@
+{% extends 'MirageAdminBundle::layout.html.twig' %}
+{% block contents %}
+    <div id="content">
+
+
+
+
+
+
+        <h1>가챠 테스트</h1><br>
+
+        {% for summon in allSummons %}
+         <h2><b> ID : {{ summon.idSummon |str('summon', 'name') }}</b> {{ summon.idOrigin  }}</h2><br>
+            {% for mode in summon.summonModes %}
+                <b> {{ mode.idMode |str('summon', 'name') }} ({{ mode.billingType }}) </b>
+                가격 {{ mode.price }}/{{ mode.drawCount }}회<br>
+                유효기간 {{ mode.startDay |date("Y/m/d")}} ~ {{ mode.endDay |date("Y/m/d")}}<br>
+                <a href="{{url('summon_test')}}?{{ {'id' : summon.idSummon, 'count' : mode.drawCount, 'mode' : mode.idMode }|url_encode }}"> 너의 운을 시험하라 </a><br><br>
+            {% endfor %}
+<br><br>
+        {% endfor %}
+
+
+
+
+
+    </div>
+{% endblock contents %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('/bundles/admin/js/jquery-2.1.4.min.js')}}" type="text/javascript"></script>
+{% endblock %}

@@ -16,6 +16,8 @@ use Mirage\AdminBundle\Controller\GameConfig;
  */
 class Equipment
 {
+
+
     /**
      * @MongoDB\Id(name="_id")
      */
@@ -24,22 +26,7 @@ class Equipment
     /**
      * @MongoDB\int
      */
-    protected $equipmentId;
-
-    /**
-     * @MongoDB\Int
-     */
-    protected $itemId;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $name_kr;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $name_jp;
+    protected $idEquipment;
 
     /**
      * @MongoDB\String
@@ -55,11 +42,6 @@ class Equipment
      * @MongoDB\Int
      */
     protected $tier;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $description;
 
 
     /**
@@ -78,9 +60,9 @@ class Equipment
      * @param int $equipmentId
      * @return self
      */
-    public function setEquipmentId($equipmentId)
+    public function setIdEquipment($idEquipment)
     {
-        $this->equipmentId = $equipmentId;
+        $this->idEquipment = $idEquipment;
         return $this;
     }
 
@@ -89,76 +71,11 @@ class Equipment
      *
      * @return int $equipmentId
      */
-    public function getEquipmentId()
+    public function getIdEquipment()
     {
-        return $this->equipmentId;
+        return $this->idEquipment;
     }
 
-    /**
-     * Set itemId
-     *
-     * @param int $itemId
-     * @return self
-     */
-    public function setItemId($itemId)
-    {
-        $this->itemId = $itemId;
-        return $this;
-    }
-
-    /**
-     * Get itemId
-     *
-     * @return int $itemId
-     */
-    public function getItemId()
-    {
-        return $this->itemId;
-    }
-
-    /**
-     * Set nameKr
-     *
-     * @param string $nameKr
-     * @return self
-     */
-    public function setNameKr($nameKr)
-    {
-        $this->name_kr = $nameKr;
-        return $this;
-    }
-
-    /**
-     * Get nameKr
-     *
-     * @return string $nameKr
-     */
-    public function getNameKr()
-    {
-        return $this->name_kr;
-    }
-
-    /**
-     * Set nameJp
-     *
-     * @param string $nameJp
-     * @return self
-     */
-    public function setNameJp($nameJp)
-    {
-        $this->name_jp = $nameJp;
-        return $this;
-    }
-
-    /**
-     * Get nameJp
-     *
-     * @return string $nameJp
-     */
-    public function getNameJp()
-    {
-        return $this->name_jp;
-    }
 
     /**
      * Set effect
@@ -224,28 +141,6 @@ class Equipment
     public function getTier()
     {
         return $this->tier;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return self
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string $description
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     public function deleteId()

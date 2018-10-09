@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: JF_WS00
+ * User: Krsanika
  * Date: 2016-08-17
  * Time: 오후 6:37
  */
@@ -9,18 +9,27 @@
 namespace Mirage\MainBundle\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\Common\Collections\ArrayCollection;
-use Mirage\AdminBundle\Controller\GameConfig;
+use JMS\Serializer\Annotation\Type as JMSType;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="Mirage\MainBundle\Repository\SkillRepository")
  */
 class Skill
 {
 
     public function __construct()
     {
-        $this->effect = new ArrayCollection();
-        $this->volume = new ArrayCollection();
+        $this->levels = new ArrayCollection();
+        $this->levels->add(new SkillLevel(1));
+        $this->levels->add(new SkillLevel(2));
+        $this->levels->add(new SkillLevel(3));
+        $this->levels->add(new SkillLevel(4));
+        $this->levels->add(new SkillLevel(5));
+        $this->levels->add(new SkillLevel(6));
+        $this->levels->add(new SkillLevel(7));
+        $this->levels->add(new SkillLevel(8));
+        $this->levels->add(new SkillLevel(9));
+        $this->levels->add(new SkillLevel(10));
     }
 
     /**
@@ -31,64 +40,38 @@ class Skill
     /**
      * @MongoDB\Int
      */
-    protected $skillId;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $name_kr;
-
-    /**
-     * @MongoDB\String
-     */
-    protected $name_jp;
-
-    /**
-     * @MongoDB\Int
-     */
-    protected $type;
-
-    /**
-     * @MongoDB\Int
-     */
-    protected $duration;
-
-    /**
-     * @MongoDB\Int
-     */
-    protected $area;
-
-    /**
-     * @MongoDB\Int
-     */
-    protected $target;
-
+    protected $idSkill;
 
     /**
      * @MongoDB\Int
      */
     protected $consume;
 
+
     /**
-     * @MongoDB\String
+     * @MongoDB\Boolean
      */
-    protected $description;
+    protected $isMelee;
 
     /**
-     * @MongoDB\Collection
+     * @MongoDB\Int
      */
-    protected $effect = array();
+    protected $idSource;
+
+
+
 
     /**
-     * @MongoDB\Collection
+     * @JMSType("ArrayCollection<Mirage\MainBundle\Document\SkillLevel>")
+     * @MongoDB\EmbedMany(name="levels", targetDocument="Mirage\MainBundle\Document\SkillLevel")
      */
-    protected $volume = array();
+    protected $levels = array();
+
+
 
 
     /**
-     * Get id
-     *
-     * @return id $id
+     * @return mixed
      */
     public function getId()
     {
@@ -96,225 +79,78 @@ class Skill
     }
 
     /**
-     * Set skillId
-     *
-     * @param int $skillId
-     * @return self
+     * @param mixed $id
      */
-    public function setSkillId($skillId)
+    public function setId($id)
     {
-        $this->skillId = $skillId;
-        return $this;
+        $this->id = $id;
     }
 
     /**
-     * Get skillId
-     *
-     * @return int $skillId
+     * @return mixed
      */
-    public function getSkillId()
+    public function getIdSkill()
     {
-        return $this->skillId;
+        return $this->idSkill;
     }
 
     /**
-     * Set nameKr
-     *
-     * @param string $nameKr
-     * @return self
+     * @param mixed $idSkill
      */
-    public function setNameKr($nameKr)
+    public function setIdSkill($idSkill)
     {
-        $this->name_kr = $nameKr;
-        return $this;
+        $this->idSkill = $idSkill;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getLevels()
+    {
+        return $this->levels;
     }
 
     /**
-     * Get nameKr
-     *
-     * @return string $nameKr
+     * @param mixed $levels
      */
-    public function getNameKr()
+    public function setLevels($levels)
     {
-        return $this->name_kr;
+        $this->levels = $levels;
+    }
+
+
+
+
+    public function addLevel(\Mirage\MainBundle\Document\SkillLevel $level)
+    {
+        $this->levels[] = $level;
+    }
+
+    public function removeLevel(\Mirage\MainBundle\Document\SkillLevel $level)
+    {
+        $this->levels->removeElement($level);
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getConsume()
+    {
+        return $this->consume;
     }
 
     /**
-     * Set nameJp
-     *
-     * @param string $nameJp
-     * @return self
+     * @param mixed $consume
      */
-    public function setNameJp($nameJp)
+    public function setConsume($consume)
     {
-        $this->name_jp = $nameJp;
-        return $this;
+        $this->consume = $consume;
     }
 
-    /**
-     * Get nameJp
-     *
-     * @return string $nameJp
-     */
-    public function getNameJp()
-    {
-        return $this->name_jp;
-    }
 
-    /**
-     * Set type
-     *
-     * @param int $type
-     * @return self
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return int $type
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set duration
-     *
-     * @param int $duration
-     * @return self
-     */
-    public function setDuration($duration)
-    {
-        $this->duration = $duration;
-        return $this;
-    }
-
-    /**
-     * Get duration
-     *
-     * @return int $duration
-     */
-    public function getDuration()
-    {
-        return $this->duration;
-    }
-
-    /**
-     * Set area
-     *
-     * @param int $area
-     * @return self
-     */
-    public function setArea($area)
-    {
-        $this->area = $area;
-        return $this;
-    }
-
-    /**
-     * Get area
-     *
-     * @return int $area
-     */
-    public function getArea()
-    {
-        return $this->area;
-    }
-
-    /**
-     * Set target
-     *
-     * @param int $target
-     * @return self
-     */
-    public function setTarget($target)
-    {
-        $this->target = $target;
-        return $this;
-    }
-
-    /**
-     * Get target
-     *
-     * @return int $target
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return self
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string $description
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set effect
-     *
-     * @param collection $effect
-     * @return self
-     */
-    public function setEffect($effect)
-    {
-        $this->effect = $effect;
-        return $this;
-    }
-
-    /**
-     * Get effect
-     *
-     * @return collection $effect
-     */
-    public function getEffect()
-    {
-        return $this->effect;
-    }
-
-    /**
-     * Set volume
-     *
-     * @param collection $volume
-     * @return self
-     */
-    public function setVolume($volume)
-    {
-        $this->volume = $volume;
-        return $this;
-    }
-
-    /**
-     * Get volume
-     *
-     * @return collection $volume
-     */
-    public function getVolume()
-    {
-        return $this->volume;
-    }
-
+    //===================================//
     public function deleteId()
     {
         unset($this->id);
@@ -322,25 +158,77 @@ class Skill
         return $this;
     }
 
-    /**
-     * Set consume
-     *
-     * @param int $consume
-     * @return self
-     */
-    public function setConsume($consume)
-    {
-        $this->consume = $consume;
-        return $this;
+    public function getDataWithLevel($lv){
+//        var_dump($this->getIdSkill()."_".$this->levels->count());
+        foreach($this->levels as &$level){
+            if($level->getLv() != $lv){
+                $this->levels->removeElement($level);
+            }
+        }
+
+        $data = [
+            'idSkill' => $this->idSkill,
+            'lv' => $this->levels->first()->getLv(),
+            'effects' => $this->levels->first()->getEffects()
+        ];
+
+
+
+        return $data;
     }
 
     /**
-     * Get consume
-     *
-     * @return int $consume
+     * @return mixed
      */
-    public function getConsume()
+    public function isMelee()
     {
-        return $this->consume;
+        return $this->isMelee;
     }
+
+    /**
+     * @param mixed $isMelee
+     */
+    public function setIsMelee($isMelee)
+    {
+        $this->isMelee = $isMelee;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdSource()
+    {
+        return $this->idSource;
+    }
+
+    /**
+     * @param mixed $idSource
+     */
+    public function setIdSource($idSource)
+    {
+        $this->idSource = $idSource;
+    }
+
+    public function serializer()
+    {
+        $encoder    = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
+
+        $normalizer->setIgnoredAttributes(array(
+            'whatever', 'attributes', 'you', 'want', 'to', 'ignore'
+        ));
+
+        // The setCircularReferenceLimit() method of this normalizer sets the number
+        // of times it will serialize the same object
+        // before considering it a circular reference. Its default value is 1.
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getName();
+        });
+
+        $serializer = new Serializer(array($normalizer), array($encoder));
+        return $serializer->serialize($this, 'json');
+    }
+
+
+
 }

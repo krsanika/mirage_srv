@@ -24,16 +24,17 @@ class IEncounterPawnStatus
     /**
      * @var integer
      *
-     * @ORM\Column(name="idIEncounterPawn", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="IEncounterPawn", inversedBy="status")     *
+     * @ORM\JoinColumn(name="idIEncounterPawn", referencedColumnName="id")
      */
     private $idIEncounterPawn;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="status", type="integer", nullable=false)
+     * @ORM\Column(name="idCondition", type="integer", nullable=false)
      */
-    private $status;
+    private $idCondition;
 
     /**
      * @var integer
@@ -48,6 +49,36 @@ class IEncounterPawnStatus
      * @ORM\Column(name="duration", type="integer", nullable=false)
      */
     private $duration;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="volume", type="integer", nullable=false)
+     */
+    private $volume = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="percent", type="integer", nullable=false)
+     */
+    private $percent = 0;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isMerit", type="boolean", nullable=false)
+     */
+    private $isMerit = false;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="idSubject", type="integer", nullable=false)
+     */
+    private $idSubject = 0;
+
 
     /**
      * @var integer
@@ -68,8 +99,29 @@ class IEncounterPawnStatus
      *
      * @ORM\Column(name="isEnabled", type="boolean", nullable=false)
      */
-    private $isEnabled = '0';
+    private $isEnabled = false;
 
+    /**
+     * IEncounterPawnStatus constructor.
+     * @param int $idIEncounterPawn
+     * @param int $startTurn
+     * @param int $duration
+     * @param int $created
+     * @param int $updated
+     * @param bool $isEnabled
+     */
+    public function __construct($idIEncounterPawn, $startTurn, $duration, $isMerit, $now)
+    {
+        $this->idIEncounterPawn = $idIEncounterPawn;
+        $this->startTurn = $startTurn;
+        $this->duration = $duration;
+        $this->isMerit = $isMerit;
+        $this->volume = 0;
+        $this->percent = 0;
+        $this->created = $now;
+        $this->updated = $now;
+        $this->isEnabled = true;
+    }
 
 
     /**
@@ -107,28 +159,21 @@ class IEncounterPawnStatus
     }
 
     /**
-     * Set status
-     *
-     * @param integer $status
-     *
-     * @return IEncounterPawnStatus
+     * @return int
      */
-    public function setStatus($status)
+    public function getidCondition()
     {
-        $this->status = $status;
-
-        return $this;
+        return $this->idCondition;
     }
 
     /**
-     * Get status
-     *
-     * @return integer
+     * @param int $condition
      */
-    public function getStatus()
+    public function setidCondition($idCondition)
     {
-        return $this->status;
+        $this->idCondition = $idCondition;
     }
+
 
     /**
      * Set startTurn
@@ -155,6 +200,23 @@ class IEncounterPawnStatus
     }
 
     /**
+     * @return int
+     */
+    public function getEndTurn()
+    {
+        return $this->endTurn;
+    }
+
+    /**
+     * @param int $endTurn
+     */
+    public function setEndTurn($endTurn)
+    {
+        $this->endTurn = $endTurn;
+    }
+
+
+    /**
      * Set duration
      *
      * @param integer $duration
@@ -177,6 +239,72 @@ class IEncounterPawnStatus
     {
         return $this->duration;
     }
+
+    /**
+     * @return int
+     */
+    public function getVolume()
+    {
+        return $this->volume;
+    }
+
+    /**
+     * @param int $volume
+     */
+    public function setVolume($volume)
+    {
+        $this->volume = $volume;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPercent()
+    {
+        return $this->percent;
+    }
+
+    /**
+     * @param int $percent
+     */
+    public function setPercent($percent)
+    {
+        $this->percent = $percent;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMerit()
+    {
+        return $this->isMerit;
+    }
+
+    /**
+     * @param boolean $isMerit
+     */
+    public function setIsMerit($isMerit)
+    {
+        $this->isMerit = $isMerit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdSubject()
+    {
+        return $this->idSubject;
+    }
+
+    /**
+     * @param int $idSubject
+     */
+    public function setIdSubject($idSubject)
+    {
+        $this->idSubject = $idSubject;
+    }
+
+
 
     /**
      * Set created
@@ -245,8 +373,20 @@ class IEncounterPawnStatus
      *
      * @return boolean
      */
-    public function getIsEnabled()
+    public function IsEnabled()
     {
         return $this->isEnabled;
     }
+
+//   --------------------
+
+    public function unsetForBattle(){
+        unset($this->id);
+        unset($this->idIEncounterPawn);
+        unset($this->created);
+        unset($this->updated);
+        unset($this->isEnabled);
+        return $this;
+    }
+
 }

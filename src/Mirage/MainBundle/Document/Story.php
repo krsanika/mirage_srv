@@ -12,11 +12,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Type;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="Mirage\MainBundle\Repository\StoryRepository")
  */
 class Story
 {
-
 
     /**
      * @MongoDB\Id
@@ -26,13 +25,24 @@ class Story
     /**
      * @MongoDB\Int
      */
-    protected $titleId;
+    protected $idTitle;
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $year;
+
+
+    /**
+     * @MongoDB\Int
+     */
+    protected $yearUiValue;
 
     /**
      * @MongoDB\EmbedMany(targetDocument="Mirage\MainBundle\Document\Chapter")
      * @Type("ArrayCollection<Mirage\MainBundle\Document\Chapter>")
      */
-    protected $chapters =array();
+    protected $chapters = array();
 
     /**
      * Story constructor.
@@ -62,7 +72,7 @@ class Story
     /**
      * @return mixed
      */
-    public function getTitleId()
+    public function getIdTitle()
     {
         return $this->titleId;
     }
@@ -70,9 +80,10 @@ class Story
     /**
      * @param mixed $titleId
      */
-    public function setTitleId($titleId)
+    public function setIdTitle($idTitle)
     {
-        $this->titleId = $titleId;
+        $this->idTitle = $idTitle;
+        return $this;
     }
 
     /**
@@ -89,6 +100,7 @@ class Story
     public function setChapters($chapters)
     {
         $this->chapters = $chapters;
+        return $this;
     }
 
     public function unsetObjectId(){
@@ -117,4 +129,39 @@ class Story
     {
         $this->chapters->removeElement($chapter);
     }
+
+    public function getYearUiValue()
+    {
+       return $this->yearUiValue;
+    }
+
+    public function setYearUiValue($yearUiValue)
+    {
+        $this->yearUiValue = $yearUiValue;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * @param mixed $year
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+        return $this;
+    }
+
+    public function unsetYearAndValue(){
+        unset($this->year);
+        unset($this->yearUiValue);
+        return $this;
+    }
+
 }
